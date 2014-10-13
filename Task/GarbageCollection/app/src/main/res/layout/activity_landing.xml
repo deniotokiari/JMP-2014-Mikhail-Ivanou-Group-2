@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".LandingActivity">
+
+    <Button
+        android:id="@+id/small"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/screen_small" />
+
+    <Button
+        android:id="@+id/normal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/screen_normal" />
+
+    <Button
+        android:id="@+id/large"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/screen_large" />
+
+    <Button
+        android:id="@+id/xlarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/screen_xlarge" />
+
+    <CheckBox
+        android:id="@+id/optimize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/optimize" />
+
+</LinearLayout>
