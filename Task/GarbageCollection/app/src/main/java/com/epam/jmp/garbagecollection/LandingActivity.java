@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.CheckBox;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class LandingActivity extends Activity implements View.OnClickListener {
