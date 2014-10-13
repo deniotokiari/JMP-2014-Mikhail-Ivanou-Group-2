@@ -6,6 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class LandingActivity extends Activity implements View.OnClickListener {
 
     private static final int BUTTON_SMALL = R.id.small;
@@ -15,20 +19,24 @@ public class LandingActivity extends Activity implements View.OnClickListener {
 
     private static final String FORMAT_FILE = "%s_%d.jpg";
 
-    private static final int LENGTH_DATA = 5;
-
     private static final String PREFIX_SMALL = "small";
     private static final String PREFIX_NORMAL = "normal";
     private static final String PREFIX_LARGE = "large";
     private static final String PREFIX_XLARGE = "xlarge";
 
     private String[] getFiles(int id) {
-        final String[] files = new String[LENGTH_DATA];
-        for (int i = 0; i < files.length; i++) {
-            files[i] = String.format(FORMAT_FILE, getScreenType(id), i);
+        List<String> list=new ArrayList<String>();
+        for (int i = 0; i < 5; i++) {
+            list.add(String.format(FORMAT_FILE, getScreenType(id), i));
         }
-        return files;
+        list.addAll(list);
+        list.addAll(list);
+        list.addAll(list);
+        list.addAll(list);
+        return list.toArray(new String[list.size()]);
     }
+
+
 
     private String getScreenType(int id) {
         if (id == BUTTON_SMALL) return PREFIX_SMALL;

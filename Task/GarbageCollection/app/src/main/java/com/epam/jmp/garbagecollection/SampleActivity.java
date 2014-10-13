@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -23,11 +25,37 @@ public class SampleActivity extends ListActivity {
     private static final int LAYOUT_RES_ID = R.layout.adapter_sample;
 
     public static final boolean DEFAULT_IS_OPTIMIZED = false;
-    HashMap<String, Bitmap> mMap;
+    private HashMap<String, Bitmap> mMap;
+    private TextView mInfo;
+    private Handler mHandler;
+    private Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mInfo.setText("Used memory: " + getUsedMemorySize() + "kb of " + (Runtime.getRuntime().maxMemory() / 1024) + "kb");
+            mHandler.postDelayed(this, 1000L);
+        }
+    };
+
+    public static long getUsedMemorySize() {
+        long freeSize = 0L;
+        long totalSize = 0L;
+        long usedSize = -1L;
+        try {
+            Runtime info = Runtime.getRuntime();
+            freeSize = info.freeMemory();
+            totalSize = info.totalMemory();
+            usedSize = totalSize - freeSize;
+        } catch (Exception e) {
+        }
+        return usedSize / 1024;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mHandler = new Handler(getMainLooper());
+        mHandler.removeCallbacks(mRunnable);
+        mHandler.post(mRunnable);
         setContentView(R.layout.activity_sample);
 
         final Intent intent = getIntent();
@@ -39,6 +67,14 @@ public class SampleActivity extends ListActivity {
             mMap = new HashMap<String, Bitmap>();
         }
         setListAdapter(new ImageAdapter(getApplicationContext(), files, isOptimized));
+        mInfo = (TextView) findViewById(R.id.info);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        mHandler.removeCallbacks(mRunnable);
     }
 
     private class ImageAdapter extends ArrayAdapter<String> {
@@ -52,27 +88,50 @@ public class SampleActivity extends ListActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            ImageView view = (ImageView) getLayoutInflater().inflate(LAYOUT_RES_ID, parent, false);
+            if (convertView == null) {
+                convertView = (ImageView) getLayoutInflater().inflate(LAYOUT_RES_ID, parent, false);
+            }
+            convertView.requestLayout();
             final String imagePath = getItem(position);
-            bindImage(imagePath, view);
-            return view;
+            bindImage(imagePath, (ImageView) convertView);
+            return convertView;
         }
 
-        private void bindImage(String imagePath, ImageView imageView) {
-            try {
-                Bitmap bitmap = null;
-                if (isOptimized) {
-                    bitmap = mMap.get(imagePath);
-                    if (bitmap == null) {
-                        bitmap = decodeSampledBitmapFromResource(getContext(), imagePath, 100, 100);
-                        mMap.put(imagePath, bitmap);
-                    }
-                } else {
-                    bitmap = BitmapFactory.decodeStream(getAssets().open(imagePath));
+        private void bindImage(final String imagePath, final ImageView imageView) {
+            if (isOptimized) {
+                final Bitmap cachedBitmap = mMap.get(imagePath);
+                if (cachedBitmap != null) {
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            imageView.setImageBitmap(cachedBitmap);
+                        }
+                    });
+                    return;
                 }
-                imageView.setImageBitmap(bitmap);
-            } catch (Exception e) {
-                imageView.setImageResource(R.drawable.ic_launcher);
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        try {
+                            final Bitmap bitmap = decodeSampledBitmapFromResource(getContext(), imagePath, imageView.getMeasuredWidth(), imageView.getMeasuredHeight());
+                            mMap.put(imagePath, bitmap);
+                            imageView.setImageBitmap(bitmap);
+                        } catch (Exception e) {
+                            imageView.setImageResource(R.drawable.ic_launcher);
+                        }
+                    }
+                });
+            } else {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            final Bitmap bitmap = BitmapFactory.decodeStream(getAssets().open(imagePath));
+                            imageView.setImageBitmap(bitmap);
+                        } catch (IOException e) {
+                            imageView.setImageResource(R.drawable.ic_launcher);
+                        }
+                    }
+                });
             }
         }
     }
