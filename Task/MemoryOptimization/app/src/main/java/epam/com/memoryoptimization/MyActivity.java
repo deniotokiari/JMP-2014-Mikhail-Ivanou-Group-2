@@ -22,8 +22,8 @@ import android.widget.TextView;
 public class MyActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-    private Activity mActivity;
-    private Fragment mFragment = null;
+    private Activity mActivity; //variable is not used
+    private Fragment mFragment = null; //variable is not used
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -53,9 +53,9 @@ public class MyActivity extends Activity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         Fragment fragment = null;
-        switch (position) {
+        switch (position) { // move to constant value 1,2,3
             case 1:
-                mFragment = new FragmentOne();
+                mFragment = new FragmentOne(); // get instance
                 break;
             case 2:
                 mFragment = FragmentTwo.newInstance(position + 1);

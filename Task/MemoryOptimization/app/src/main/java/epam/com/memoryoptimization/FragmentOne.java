@@ -38,7 +38,7 @@ public class FragmentOne extends Fragment {
         viewById.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(), "No action implemented", Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), "No action implemented", Toast.LENGTH_SHORT).show(); // move to @string
             }
         });
         ImageView iconView = (ImageView) view.findViewById(R.id.section_icon);

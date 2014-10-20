@@ -10,14 +10,14 @@ import java.util.HashMap;
  * Created by Mike on 19.10.2014.
  */
 public class IconManager {
+//use singleton
 
-
-    private Context mContext;
+    private Context mContext;//variable is not used
     private HashMap<SocialType, Bitmap> mBitmaps;
 
 
     public IconManager(Context ctx) {
-        ctx = mContext;
+        ctx = mContext; //dead code
         mBitmaps = new HashMap<SocialType, Bitmap>();
         Bitmap value = BitmapFactory.decodeResource(mContext.getResources(),
                 R.drawable.ic_fb);

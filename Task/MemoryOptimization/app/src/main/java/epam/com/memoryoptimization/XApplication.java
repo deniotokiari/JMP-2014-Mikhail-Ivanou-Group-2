@@ -7,11 +7,11 @@ import android.app.Fragment;
 /**
  * Created by Mike on 19.10.2014.
  */
-public class XApplication extends Application {
+public class XApplication extends Application { //class is not used in android manifest
 
     public static Activity mCurrentActivity;
-    private static Fragment mCurrentFragment;
-    private static long mLastActivity;
+    private static Fragment mCurrentFragment; //variable is not used
+    private static long mLastActivity; //variable is not used
 
 
     @Override

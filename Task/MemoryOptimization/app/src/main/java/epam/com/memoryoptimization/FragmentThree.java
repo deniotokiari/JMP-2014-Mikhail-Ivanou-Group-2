@@ -49,7 +49,7 @@ public class FragmentThree extends Fragment {
     public void onResume() {
         super.onResume();
         IconManager iconManager = new IconManager(activity);
-        Bitmap icon = iconManager.getIcon(SocialType.LINKED_IN);
+        Bitmap icon = iconManager.getIcon(SocialType.LINKED_IN);//dead code
         TextView viewById = (TextView) getView().findViewById(R.id.section_label);
         viewById.setText("Click Me");
         viewById.setOnClickListener(onClickListener);

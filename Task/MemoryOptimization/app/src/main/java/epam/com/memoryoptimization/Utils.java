@@ -10,7 +10,7 @@ import java.util.Random;
  * Created by Mike on 19.10.2014.
  */
 public class Utils {
-
+    //create locale an image repository for Bitmap
 
     private static Bitmap bitmap;
 
@@ -22,7 +22,7 @@ public class Utils {
     }
 
     public static int getRandomResId() {
-        int i = new Random().nextInt(8);
+        int i = new Random().nextInt(8); // create static variable for Random
         switch (i) {
             case 1: return R.drawable.ic_fb;
             case 2: return R.drawable.ic_g_plus;
