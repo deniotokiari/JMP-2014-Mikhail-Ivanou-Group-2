@@ -1,7 +1,6 @@
 package epam.com.memoryoptimization;
 
 import android.app.Fragment;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -19,29 +18,24 @@ public class FragmentOne extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_my, container, false);
-        return rootView;
-
+        return inflater.inflate(R.layout.fragment_my, container, false);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        IconManager iconManager = new IconManager(getActivity());
-        Bitmap icon = iconManager.getIcon(SocialType.LINKED_IN);
-        View view = getView();
+        final View view = getView();
         if (view == null) {
             return;
         }
-        TextView viewById = (TextView) view.findViewById(R.id.section_label);
-        viewById.setText("Click Me");
+        final TextView viewById = (TextView) view.findViewById(R.id.section_label);
+        viewById.setText(getString(R.string.click_me));//I've moved text to string resources
         viewById.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(), "No action implemented", Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), getString(R.string.msg), Toast.LENGTH_SHORT).show();//I've moved text to string resources
             }
         });
-        ImageView iconView = (ImageView) view.findViewById(R.id.section_icon);
-        iconView.setImageBitmap(icon);
+        ((ImageView) view.findViewById(R.id.section_icon)).setImageBitmap(IconManager.get().getIcon(SocialType.LINKED_IN));
     }
 }

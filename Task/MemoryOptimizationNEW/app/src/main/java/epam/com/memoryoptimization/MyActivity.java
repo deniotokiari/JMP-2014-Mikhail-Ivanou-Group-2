@@ -1,28 +1,25 @@
 package epam.com.memoryoptimization;
 
-import android.app.Activity;
-
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 
 public class MyActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-    private Activity mActivity;
+    //I've replaced "magic numbers" for fragments
+    public static final int FRAGMENT_ONE = 1;
+    public static final int FRAGMENT_TWO = 2;
+    public static final int FRAGMENT_THREE = 3;
     private Fragment mFragment = null;
 
     /**
@@ -39,7 +36,7 @@ public class MyActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
-        mActivity = this;
+        //I've removed unused variable in this class
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -52,33 +49,38 @@ public class MyActivity extends Activity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        Fragment fragment = null;
+        //I've removed unused variable in this class. We use global variable mFragment
         switch (position) {
-            case 1:
+            //I've changed this 'magic number' to constant
+            case FRAGMENT_ONE:
                 mFragment = new FragmentOne();
                 break;
-            case 2:
+            case FRAGMENT_TWO:
                 mFragment = FragmentTwo.newInstance(position + 1);
                 break;
-            case 3:
+            case FRAGMENT_THREE:
                 mFragment = FragmentThree.newInstance(position + 1);
                 break;
+            default:
+                mFragment = PlaceholderFragment.newInstance(position);
         }
+
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
-                .add(R.id.container, fragment)
+                .add(R.id.container, mFragment)//I've replaced variable fragment to mFragment
                 .commit();
     }
 
     public void onSectionAttached(int number) {
         switch (number) {
-            case 1:
+            //I've changed this 'magic number' to constant
+            case FRAGMENT_ONE:
                 mTitle = getString(R.string.title_section1);
                 break;
-            case 2:
+            case FRAGMENT_TWO:
                 mTitle = getString(R.string.title_section2);
                 break;
-            case 3:
+            case FRAGMENT_THREE:
                 mTitle = getString(R.string.title_section3);
                 break;
         }
@@ -145,15 +147,15 @@ public class MyActivity extends Activity
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_my, container, false);
-            return rootView;
+            //Not use temp object (GC has less work)
+            return inflater.inflate(R.layout.fragment_my, container, false);
         }
 
         @Override
         public void onAttach(Activity activity) {
             super.onAttach(activity);
             ((MyActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
+                    getArguments().getInt(ARG_SECTION_NUMBER,FRAGMENT_ONE));
         }
     }
 

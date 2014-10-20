@@ -1,16 +1,16 @@
 package epam.com.memoryoptimization;
 
 
-import android.app.Activity;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -90,8 +90,11 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        mDrawerListView = (ListView) inflater.inflate(
+        //in layout fragment_navigation_drawer root element is RelativeLayout
+        final View view = inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
+        //maybe not good set name android.R.id.lis for this list
+        mDrawerListView = (ListView) view.findViewById(android.R.id.list);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -108,7 +111,7 @@ public class NavigationDrawerFragment extends Fragment {
                         getString(R.string.title_section3),
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-        return mDrawerListView;
+        return view;
     }
 
     public boolean isDrawerOpen() {
@@ -190,12 +193,16 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     private void resetIcon() {
-        FrameLayout viewById = (FrameLayout) getView().findViewById(R.id.iconFrame);
+        //check getView() for exist
+        final View view = getView();
+        if (view == null) {
+            return;
+        }
+        final FrameLayout viewById = (FrameLayout) view.findViewById(R.id.iconFrame);
         viewById.removeAllViews();
-        CustomView view = new CustomView(getActivity());
-        view.setNewIcon(Utils.getRandomResId());
-        viewById.addView(view);
-
+        final CustomView customView = new CustomView(getActivity());//I've renamed variable view to customView
+        customView.setNewIcon(Utils.getRandomResId());
+        viewById.addView(customView);
     }
 
     private void selectItem(int position) {

@@ -16,37 +16,39 @@ import android.view.View;
  */
 public class CustomView extends View {
 
-    private Bitmap icon;
+    private Bitmap mIcon; //naming convention https://source.android.com/source/code-style.html
 
     public CustomView(Context context) {
         super(context);
-        init(context);
+        init();
     }
 
     public CustomView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        init();
     }
 
     public CustomView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+        init();
     }
 
     @TargetApi(Build.VERSION_CODES.L)
     public CustomView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init(context);
-
+        init();
     }
 
-    private void init(Context context) {
-        icon = BitmapFactory.decodeResource(context.getResources(),
-                R.drawable.ic_linked);
+    private void init() {
+        mIcon = getBitmap(R.drawable.ic_linked);
     }
 
     public void setNewIcon(int res) {
-        icon = BitmapFactory.decodeResource(getContext().getResources(),
+        mIcon = getBitmap(res);
+    }
+
+    private Bitmap getBitmap(int res) {
+        return BitmapFactory.decodeResource(getContext().getResources(),
                 res);
     }
 
@@ -54,8 +56,8 @@ public class CustomView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         RectF destinationRect = new RectF(0, 0, getMeasuredWidth(), getMeasuredWidth());
-        Rect originalRect = new Rect(0, 0, icon.getWidth(), icon.getHeight());
-        canvas.drawBitmap(icon, originalRect, destinationRect, null);
+        Rect originalRect = new Rect(0, 0, mIcon.getWidth(), mIcon.getHeight());
+        canvas.drawBitmap(mIcon, originalRect, destinationRect, null);
     }
 
 }

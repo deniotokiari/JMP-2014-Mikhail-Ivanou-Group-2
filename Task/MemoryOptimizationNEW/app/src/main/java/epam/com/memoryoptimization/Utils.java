@@ -11,18 +11,23 @@ import java.util.Random;
  */
 public class Utils {
 
+    //DST_WIDTH and DST_HEIGHT
+    public static final int DST_WIDTH = 256;
+    public static final int DST_HEIGHT = 256;
+    public static final Random RANDOM = new Random(); //create constant for random generation
 
-    private static Bitmap bitmap;
-
-    public static Bitmap getIcon(Context ctx, SocialType type) {
-        Bitmap value = BitmapFactory.decodeResource(ctx.getResources(),
-                type.getResId());
-        bitmap = Bitmap.createScaledBitmap(value, 256, 256, true);
-        return bitmap;
+    public static Bitmap getIcon(Context ctx, int type) {
+        final Bitmap src = BitmapFactory.decodeResource(ctx.getResources(),
+                type);
+        //if src == null throw exception
+        if (src == null) {
+            throw new NullPointerException("The image could not be decoded.");
+        }
+        return Bitmap.createScaledBitmap(src, DST_WIDTH, DST_HEIGHT, true);
     }
 
     public static int getRandomResId() {
-        int i = new Random().nextInt(8);
+        final int i = RANDOM.nextInt(8);
         switch (i) {
             case 1: return R.drawable.ic_fb;
             case 2: return R.drawable.ic_g_plus;
