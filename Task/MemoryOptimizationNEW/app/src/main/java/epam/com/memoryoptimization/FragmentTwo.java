@@ -15,7 +15,7 @@ import android.widget.TextView;
  */
 public class FragmentTwo extends Fragment {
 
-    private static Fragment mCurrent;
+    private static Fragment mCurrent; // it's bad practice to store static fields for fragments, activities and other objects that should be destroid when not needed.
 
     public static FragmentTwo newInstance(int sectionNumber) {
         FragmentTwo fragment = new FragmentTwo();
@@ -54,6 +54,8 @@ public class FragmentTwo extends Fragment {
                 getArguments().getInt(MyActivity.PlaceholderFragment.ARG_SECTION_NUMBER));
     }
 
+
+    // is this listener used?
     private static View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
