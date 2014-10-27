@@ -38,10 +38,12 @@ public class StoreHelper {
         @Override
         public void run() {
             Log.d(TAG, "[START] ChannelsGen");
+            mChannels.clear();
             int id;
             String title, desc, image;
             Channel channel;
-            for (int i = 0; i < Constants.COUNT_CHANNELS; i++) {
+            int countChannels = Constants.COUNT_CHANNELS - mRandom.nextInt(10+1);
+            for (int i = 0; i < countChannels; i++) {
                 id = mRandom.nextInt();
                 title = DummyData.CHANNEL_TITLES[mRandom.nextInt(DummyData.CHANNEL_TITLES.length)];
                 desc = DummyData.CHANNEL_DESC[mRandom.nextInt(DummyData.CHANNEL_DESC.length)];
@@ -49,6 +51,7 @@ public class StoreHelper {
                 channel = new Channel(id, title, desc, image);
                 mChannels.add(i, channel);
             }
+            mGenListings.run();
             Log.d(TAG, "[END] ChannelsGen");
         }
     };
@@ -64,14 +67,16 @@ public class StoreHelper {
             for (int i = 0; i < sizeChannels; i++) {
                 Channel channel = mChannels.get(i);
                 List<Listing> listings = new CopyOnWriteArrayList<Listing>();
-                for (int j = 0; j < Constants.COUNT_LISTINGS_PER_CHANNELS; j++) {
+                int countListingsPerChannels = Constants.COUNT_LISTINGS_PER_CHANNELS-mRandom.nextInt(10+1);
+                for (int j = 0; j < countListingsPerChannels; j++) {
                     id = mRandom.nextInt(Constants.COUNT_LISTINGS);
-                    title = DummyData.CHANNEL_DESC[mRandom.nextInt(DummyData.CHANNEL_DESC.length)];
+                    title = DummyData.LISTING_TITLES[mRandom.nextInt(DummyData.LISTING_TITLES.length)];
                     listing = new Listing(id, channel, title);
                     listings.add(listing);
                 }
                 channel.setListings(listings);
             }
+            mGenRatios.run();
             Log.d(TAG, "[END] ListingsGen");
         }
     };
