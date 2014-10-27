@@ -46,7 +46,7 @@ public class StoreHelper {
                 int id;
                 String title, desc, image;
                 Channel channel;
-                int countChannels = Constants.COUNT_CHANNELS - mRandom.nextInt(10 + 1);
+                int countChannels = Constants.COUNT_CHANNELS - mRandom.nextInt(10);
                 for (int i = 0; i < countChannels; i++) {
                     id = mRandom.nextInt();
                     title = DummyData.CHANNEL_TITLES[mRandom.nextInt(DummyData.CHANNEL_TITLES.length)];
@@ -55,9 +55,9 @@ public class StoreHelper {
                     channel = new Channel(id, title, desc, image);
                     mChannels.put(i, channel);
                 }
-                mGenListings.run();
-                Log.d(TAG, "[END] ChannelsGen");
             }
+            mGenListings.run();
+            Log.d(TAG, "[END] ChannelsGen");
         }
     };
 
@@ -73,7 +73,7 @@ public class StoreHelper {
                 for (int i = 0; i < sizeChannels; i++) {
                     Channel channel = mChannels.get(i);
                     List<Listing> listings = new CopyOnWriteArrayList<Listing>();
-                    int countListingsPerChannels = Constants.COUNT_LISTINGS_PER_CHANNELS - mRandom.nextInt(10 + 1);
+                    int countListingsPerChannels = Constants.COUNT_LISTINGS_PER_CHANNELS - mRandom.nextInt(10);
                     for (int j = 0; j < countListingsPerChannels; j++) {
                         id = mRandom.nextInt(Integer.MAX_VALUE);
                         title = DummyData.LISTING_TITLES[mRandom.nextInt(DummyData.LISTING_TITLES.length)];
