@@ -18,10 +18,10 @@ public class ComparatorTopChannels implements Comparator<Channel> {
         if (avgF < avgS) {
             return 1;
         }
-        if (avgF > avgS) {
-            return -1;
+        if (avgF == avgS) {
+            return 0;
         }
-        return 0;
+        return -1;
     }
 
     public static int getAvg(List<Listing> listings) {

@@ -19,13 +19,17 @@ import java.util.List;
  */
 public class AdapterTopChannels extends ArrayAdapter<Channel> {
 
+    private final List<Channel> mList;
+
     public AdapterTopChannels(Context context, List<Channel> list) {
         super(context, R.layout.adapter_top_channels, list);
+        mList = list;
     }
 
     @Override
     public int getCount() {
-        return Constants.COUNT_TOP_CHANNELS;
+        int size = mList.size();
+        return size < Constants.COUNT_TOP_CHANNELS ? size : Constants.COUNT_TOP_CHANNELS;
     }
 
     @Override

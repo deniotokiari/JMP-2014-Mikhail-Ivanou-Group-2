@@ -18,13 +18,17 @@ import java.util.List;
  */
 public class AdapterTopListings extends ArrayAdapter<Listing> {
 
+    private final List<Listing> mList;
+
     public AdapterTopListings(Context context, List<Listing> list) {
         super(context, R.layout.adapter_top_listings, list);
+        mList = list;
     }
 
     @Override
     public int getCount() {
-        return Constants.COUNT_TOP_LISTINGS;
+        int size = mList.size();
+        return size < Constants.COUNT_TOP_LISTINGS ? size : Constants.COUNT_TOP_LISTINGS;
     }
 
     @Override
