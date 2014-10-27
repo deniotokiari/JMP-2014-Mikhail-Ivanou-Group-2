@@ -34,17 +34,17 @@ public class HomeActivity extends Activity {
     private final Runnable mRunnableUpdate = new Runnable() {
         @Override
         public void run() {
-            Log.d(TAG, "mRunnableUpdate");
-            mAdapterChannels = new AdapterChannels(mContext, mStoreHelper.getChannels());
-            mChannels.setAdapter(mAdapterChannels);
+                Log.d(TAG, "mRunnableUpdate");
+                mAdapterChannels = new AdapterChannels(mContext, mStoreHelper.getChannels());
+                mChannels.setAdapter(mAdapterChannels);
 
-            mAdapterTopChannels = new AdapterTopChannels(mContext, mStoreHelper.getTopChannels());
-            mTopChannels.setAdapter(mAdapterTopChannels);
+                mAdapterTopChannels = new AdapterTopChannels(mContext, mStoreHelper.getTopChannels());
+                mTopChannels.setAdapter(mAdapterTopChannels);
 
-            mAdapterTopListings = new AdapterTopListings(mContext, mStoreHelper.getTopListings());
-            mTopListing.setAdapter(mAdapterTopListings);
+                mAdapterTopListings = new AdapterTopListings(mContext, mStoreHelper.getTopListings());
+                mTopListing.setAdapter(mAdapterTopListings);
 
-            mHandler.postDelayed(mRunnableUpdate, Constants.TIME_SCREEN_UPDATE);
+                mHandler.postDelayed(mRunnableUpdate, Constants.TIME_SCREEN_UPDATE);
         }
     };
 
