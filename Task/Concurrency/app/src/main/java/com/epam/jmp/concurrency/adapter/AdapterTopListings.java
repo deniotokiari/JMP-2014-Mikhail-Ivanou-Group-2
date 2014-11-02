@@ -18,17 +18,26 @@ import java.util.List;
  */
 public class AdapterTopListings extends ArrayAdapter<Listing> {
 
-    private final List<Listing> mList;
+    private List<Listing> mData;
 
-    public AdapterTopListings(Context context, List<Listing> list) {
-        super(context, R.layout.adapter_top_listings, list);
-        mList = list;
+    public AdapterTopListings(Context context, List<Listing> data) {
+        super(context, R.layout.adapter_top_listings);
+        mData = data;
+    }
+
+    public void setData(List<Listing> data) {
+        mData = data;
     }
 
     @Override
     public int getCount() {
-        int size = mList.size();
+        int size = mData != null ? mData.size() : 0;
         return size < Constants.COUNT_TOP_LISTINGS ? size : Constants.COUNT_TOP_LISTINGS;
+    }
+
+    @Override
+    public Listing getItem(int position) {
+        return mData.get(position);
     }
 
     @Override
@@ -41,4 +50,5 @@ public class AdapterTopListings extends ArrayAdapter<Listing> {
         ((TextView) convertView.findViewById(R.id.ListingTitle)).setText(item.getTitle());
         return convertView;
     }
+
 }

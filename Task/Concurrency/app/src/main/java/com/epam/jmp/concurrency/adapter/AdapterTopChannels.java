@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.epam.jmp.concurrency.Constants;
 import com.epam.jmp.concurrency.R;
-import com.epam.jmp.concurrency.comparator.ComparatorTopListing;
 import com.epam.jmp.concurrency.data.Channel;
 
 import java.util.List;
@@ -19,17 +18,26 @@ import java.util.List;
  */
 public class AdapterTopChannels extends ArrayAdapter<Channel> {
 
-    private final List<Channel> mList;
+    private List<Channel> mData;
 
-    public AdapterTopChannels(Context context, List<Channel> list) {
-        super(context, R.layout.adapter_top_channels, list);
-        mList = list;
+    public AdapterTopChannels(Context context, List<Channel> data) {
+        super(context, R.layout.adapter_top_channels);
+        mData = data;
+    }
+
+    public void setData(List<Channel> data) {
+        mData = data;
     }
 
     @Override
     public int getCount() {
-        int size = mList.size();
+        int size = mData != null ? mData.size() : 0;
         return size < Constants.COUNT_TOP_CHANNELS ? size : Constants.COUNT_TOP_CHANNELS;
+    }
+
+    @Override
+    public Channel getItem(int position) {
+        return mData.get(position);
     }
 
     @Override
@@ -39,8 +47,8 @@ public class AdapterTopChannels extends ArrayAdapter<Channel> {
         }
         Channel item = getItem(position);
         ((TextView) convertView.findViewById(R.id.ChannelTitle)).setText(item.getTitle());
-        int stars = ComparatorTopListing.getAvg(item.getListings());
-        ((TextView) convertView.findViewById(R.id.Rating)).setText("ratio: " + stars);
+        //int stars = ComparatorTopListing.getAvg(item.getListings());
+        //((TextView) convertView.findViewById(R.id.Rating)).setText("ratio: " + stars);
         return convertView;
     }
 }

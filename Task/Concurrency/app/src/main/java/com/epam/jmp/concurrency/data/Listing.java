@@ -1,33 +1,39 @@
 package com.epam.jmp.concurrency.data;
 
-import com.epam.jmp.concurrency.Constants;
-
 /**
  * Created by sergey on 27.10.2014.
  */
 public class Listing {
     private final int mId;
-    private final Channel mChannel;
+    private final int mChannelId;
     private final String mTitle;
+    private Channel mChannel;
     private Ratio mRatio;
 
-    public Listing(int id, Channel channel, String title) {
+    public Listing(int id, int channelId, String title) {
         mId = id;
-        mChannel = channel;
+        mChannelId = channelId;
         mTitle = title;
-        mRatio = new Ratio(mId, Constants.DEF_RATIO);
     }
 
     public int getId() {
         return mId;
     }
 
-    public Channel getChannel() {
-        return mChannel;
+    public int getChannelId() {
+        return mChannelId;
     }
 
     public String getTitle() {
         return mTitle;
+    }
+
+    public Channel getChannel() {
+        return mChannel;
+    }
+
+    public void setChannel(Channel channel) {
+        mChannel = channel;
     }
 
     public Ratio getRatio() {

@@ -1,8 +1,5 @@
 package com.epam.jmp.concurrency.data;
 
-import java.util.Collections;
-import java.util.List;
-
 /**
  * Created by sergey on 27.10.2014.
  */
@@ -11,7 +8,6 @@ public class Channel {
     private final String mTitle;
     private final String mDesc;
     private final String mImage;
-    private List<Listing> mListings = Collections.EMPTY_LIST;
 
     public Channel(int id, String title, String desc, String image) {
         mId = id;
@@ -34,14 +30,6 @@ public class Channel {
 
     public String getImage() {
         return mImage;
-    }
-
-    public List<Listing> getListings() {
-        return mListings;
-    }
-
-    public void setListings(List<Listing> list) {
-        mListings = list;
     }
 
     @Override

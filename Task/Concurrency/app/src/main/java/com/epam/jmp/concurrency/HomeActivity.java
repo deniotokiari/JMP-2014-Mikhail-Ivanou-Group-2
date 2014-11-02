@@ -13,20 +13,22 @@ import com.epam.jmp.concurrency.adapter.AdapterTopListings;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
+import java.util.Collections;
+
 public class HomeActivity extends Activity {
 
-    public static final String TAG = "Concurrency:Activity";
+    public static final String TAG = "Activity";
 
     private final StoreHelper mStoreHelper = new StoreHelper();
     private Handler mHandler;
 
-    private ListView mChannels;
+    private ListView mListChannels;
     private AdapterChannels mAdapterChannels;
 
-    private ListView mTopChannels;
+    private ListView mListTopChannels;
     private AdapterTopChannels mAdapterTopChannels;
 
-    private ListView mTopListing;
+    private ListView mListTopListing;
     private AdapterTopListings mAdapterTopListings;
 
     private Context mContext;
@@ -34,17 +36,18 @@ public class HomeActivity extends Activity {
     private final Runnable mRunnableUpdate = new Runnable() {
         @Override
         public void run() {
-                Log.d(TAG, "mRunnableUpdate");
-                mAdapterChannels = new AdapterChannels(mContext, mStoreHelper.getChannels());
-                mChannels.setAdapter(mAdapterChannels);
+            Log.d(TAG, "mRunnableUpdate");
 
-                mAdapterTopChannels = new AdapterTopChannels(mContext, mStoreHelper.getTopChannels());
-                mTopChannels.setAdapter(mAdapterTopChannels);
+            mAdapterChannels.setData(mStoreHelper.getChannels());
+            mAdapterChannels.notifyDataSetChanged();
 
-                mAdapterTopListings = new AdapterTopListings(mContext, mStoreHelper.getTopListings());
-                mTopListing.setAdapter(mAdapterTopListings);
+            mAdapterTopChannels.setData(mStoreHelper.getTopChannels());
+            mAdapterTopChannels.notifyDataSetChanged();
 
-                mHandler.postDelayed(mRunnableUpdate, Constants.TIME_SCREEN_UPDATE);
+            mAdapterTopListings.setData(mStoreHelper.getTopListings());
+            mAdapterTopListings.notifyDataSetChanged();
+
+            mHandler.postDelayed(mRunnableUpdate, Constants.TIME_SCREEN_UPDATE);
         }
     };
 
@@ -53,13 +56,22 @@ public class HomeActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         mHandler = new Handler(getMainLooper());
-        mChannels = (ListView) findViewById(R.id.Channels);
-        mTopChannels = (ListView) findViewById(R.id.TopChannels);
-        mTopListing = (ListView) findViewById(R.id.TopListing);
+        mListChannels = (ListView) findViewById(R.id.Channels);
+        mListTopChannels = (ListView) findViewById(R.id.TopChannels);
+        mListTopListing = (ListView) findViewById(R.id.TopListing);
         mContext = this;
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
                 .build();
         ImageLoader.getInstance().init(config);
+
+        mAdapterChannels = new AdapterChannels(mContext, Collections.EMPTY_LIST);
+        mListChannels.setAdapter(mAdapterChannels);
+
+        mAdapterTopChannels = new AdapterTopChannels(mContext, Collections.EMPTY_LIST);
+        mListTopChannels.setAdapter(mAdapterTopChannels);
+
+        mAdapterTopListings = new AdapterTopListings(mContext, Collections.EMPTY_LIST);
+        mListTopListing.setAdapter(mAdapterTopListings);
     }
 
     @Override

@@ -2,19 +2,17 @@ package com.epam.jmp.concurrency;
 
 import android.util.Log;
 
-import com.epam.jmp.concurrency.comparator.ComparatorTopChannels;
-import com.epam.jmp.concurrency.comparator.ComparatorTopListing;
 import com.epam.jmp.concurrency.data.Channel;
 import com.epam.jmp.concurrency.data.DummyData;
 import com.epam.jmp.concurrency.data.Listing;
 import com.epam.jmp.concurrency.data.Ratio;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -25,88 +23,88 @@ import java.util.concurrent.TimeUnit;
  */
 public class StoreHelper {
 
-    public static final String TAG = "Concurrency:Helper";
+    public static final String TAG = "Helper";
 
-    private ConcurrentHashMap<Integer, Channel> mChannels = new ConcurrentHashMap<Integer, Channel>();
+    //<ChannelId, Channel>
+    private ConcurrentHashMap<Integer, Channel> mChannels =
+            new ConcurrentHashMap<Integer, Channel>(Constants.COUNT_CHANNELS);
+
+    //<ListingId, Listing>
+    private ConcurrentHashMap<Integer, Listing> mListings =
+            new ConcurrentHashMap<Integer, Listing>(Constants.COUNT_LISTINGS);
+
+    //<ListingId, Ratio>
+    private ConcurrentHashMap<Integer, Ratio> mRatios =
+            new ConcurrentHashMap<Integer, Ratio>(Constants.COUNT_LISTINGS);
 
     private Runner mRunnerChannels;
     private Runner mRunnerListings;
     private Runner mRunnerRatios;
 
-    private Random mRandom = new Random();
+    private static Random mRandom = new Random();
 
-    private final Object lock = new Object();
+    private static int nextInt(int n) {
+        return mRandom.nextInt(n);
+    }
+
+    private static int nextInt() {
+        return nextInt(Constants.MAX);
+    }
+
+    private static int genRandom(int val) {
+        return val - nextInt(Constants.MAX_KOEF);
+    }
 
     private final Runnable mGenChannels = new Runnable() {
         @Override
         public void run() {
-            synchronized (lock) {
-                Log.d(TAG, "[START] ChannelsGen");
-                mChannels.clear();
-                int id;
-                String title, desc, image;
-                Channel channel;
-                int countChannels = Constants.COUNT_CHANNELS - mRandom.nextInt(10);
-                for (int i = 0; i < countChannels; i++) {
-                    id = mRandom.nextInt();
-                    title = DummyData.CHANNEL_TITLES[mRandom.nextInt(DummyData.CHANNEL_TITLES.length)];
-                    desc = DummyData.CHANNEL_DESC[mRandom.nextInt(DummyData.CHANNEL_DESC.length)];
-                    image = DummyData.IMAGES[mRandom.nextInt(DummyData.IMAGES.length)];
-                    channel = new Channel(id, title, desc, image);
-                    mChannels.put(i, channel);
-                }
+            Log.d(TAG, "[START] ChannelsGen");
+            mChannels.clear();
+            Integer id;
+            String title, desc, image;
+            int countChannels = genRandom(Constants.COUNT_CHANNELS);
+            for (int i = 0; i < countChannels; i++) {
+                id = Integer.valueOf(nextInt());
+                title = "Channel title " + i;
+                desc = "Channel description " + i;
+                image = DummyData.IMAGES[nextInt(DummyData.IMAGES.length)];
+                mChannels.put(id, new Channel(id, title, desc, image));
             }
-            mGenListings.run();
-            Log.d(TAG, "[END] ChannelsGen");
+            Log.d(TAG, "[END] ChannelsGen " + countChannels);
         }
     };
 
     private final Runnable mGenListings = new Runnable() {
         @Override
         public void run() {
-            synchronized (lock) {
-                Log.d(TAG, "[START] ListingsGen");
-                int id;
-                String title;
-                Listing listing;
-                int sizeChannels = mChannels.size();
-                for (int i = 0; i < sizeChannels; i++) {
-                    Channel channel = mChannels.get(i);
-                    List<Listing> listings = new CopyOnWriteArrayList<Listing>();
-                    int countListingsPerChannels = Constants.COUNT_LISTINGS_PER_CHANNELS - mRandom.nextInt(10);
-                    for (int j = 0; j < countListingsPerChannels; j++) {
-                        id = mRandom.nextInt(Integer.MAX_VALUE);
-                        title = DummyData.LISTING_TITLES[mRandom.nextInt(DummyData.LISTING_TITLES.length)];
-                        listing = new Listing(id, channel, title);
-                        listings.add(listing);
-                    }
-                    channel.setListings(listings);
-                }
-                mGenRatios.run();
-                Log.d(TAG, "[END] ListingsGen");
+            Log.d(TAG, "[START] ListingsGen");
+            mListings.clear();
+            Integer listingId, channelId;
+            String title;
+            int countListings = genRandom(Constants.COUNT_LISTINGS);
+            for (int i = 0; i < countListings; i++) {
+                listingId = Integer.valueOf(nextInt());
+                channelId = Integer.valueOf(nextInt());
+                title = "Listing title " + i;
+                mListings.put(listingId, new Listing(listingId, channelId, title));
             }
+            Log.d(TAG, "[END] ListingsGen " + countListings);
         }
     };
 
     private final Runnable mGenRatios = new Runnable() {
         @Override
         public void run() {
-            synchronized (lock) {
-                Log.d(TAG, "[START] RatiosGen");
-                int sizeChannels = mChannels.size();
-                for (int i = 0; i < sizeChannels; i++) {
-                    Channel channel = mChannels.get(i);
-                    List<Listing> listings = channel.getListings();
-                    int sizeListings = listings.size();
-                    for (int j = 0; j < sizeListings; j++) {
-                        Listing listing = listings.get(j);
-                        Ratio ratio = new Ratio(listing.getId(), mRandom.nextInt(Constants.MAX_RATIO));
-                        listing.setRatio(ratio);
-                    }
-                    channel.setListings(listings);
-                }
-                Log.d(TAG, "[END] RatiosGen");
+            Log.d(TAG, "[START] RatiosGen");
+            mRatios.clear();
+            Integer listingId;
+            int countRatios = genRandom(Constants.COUNT_LISTINGS);
+            for (int i = 0; i < countRatios; i++) {
+                listingId = Integer.valueOf(nextInt());
+                Ratio ratio = new Ratio(listingId, nextInt(Constants.MAX_RATIO));
+                mRatios.put(listingId, ratio);
             }
+            Log.d(TAG, "[END] RatiosGen " + countRatios);
         }
     };
 
@@ -137,35 +135,80 @@ public class StoreHelper {
     }
 
     public List<Channel> getChannels() {
-        synchronized (lock) {
-            return Collections.list(mChannels.elements());
-        }
+        return Collections.list(mChannels.elements());
     }
 
-    private static ComparatorTopChannels comparatorTopChannels = new ComparatorTopChannels();
-    private static ComparatorTopListing comparatorTopListings = new ComparatorTopListing();
-
     public List<Channel> getTopChannels() {
-        synchronized (lock) {
-            List<Channel> topChannels = Collections.list(mChannels.elements());
-            Collections.sort(topChannels, comparatorTopChannels);
-            return topChannels;
+        List<Ratio> ratios = Collections.list(mRatios.elements());
+        Object[] array = ratios.toArray();
+        Arrays.sort(array);
+
+        List<Channel> topChannels = new ArrayList<Channel>(Constants.COUNT_TOP_CHANNELS);
+        int j = 0;
+        for (int i = 0; i < array.length; i++) {
+            Ratio ratio = (Ratio) array[i];
+            if (ratio == null) {
+                continue;
+            }
+            int listingId = ratio.getListingId();
+            Listing listing = mListings.get(listingId);
+            if (listing == null) {
+                continue;
+            }
+            int channelId = listing.getChannelId();
+            Channel channel = mChannels.get(channelId);
+            if (channel == null) {
+                continue;
+            }
+            if (j == 0) {
+                topChannels.add(channel);
+                j++;
+            } else if (j == Constants.COUNT_TOP_CHANNELS) {
+                break;
+            } else if (topChannels.get(j - 1).getId() != channelId) {
+                topChannels.add(channel);
+                j++;
+            }
         }
+        Log.d(TAG, "topChannels " + topChannels.size());
+        return topChannels;
     }
 
     public List<Listing> getTopListings() {
-        synchronized (lock) {
-            List<Listing> topListings = new ArrayList<Listing>();
-            int size = mChannels.size();
-            for (int i = 0; i < size; i++) {
-                topListings.addAll(mChannels.get(i).getListings());
+        List<Ratio> ratios = Collections.list(mRatios.elements());
+        Object[] array = ratios.toArray();
+        Arrays.sort(array);
+
+        List<Listing> topListings = new ArrayList<Listing>(Constants.COUNT_TOP_LISTINGS);
+        int j = 0;
+        for (int i = 0; i < array.length; i++) {
+            Ratio ratio = (Ratio) array[i];
+            if (ratio == null) {
+                continue;
             }
-            Collections.sort(topListings, comparatorTopListings);
-            return topListings;
+            int listingId = ratio.getListingId();
+            Listing listing = mListings.get(listingId);
+            if (listing == null) {
+                continue;
+            }
+            Channel channel = mChannels.get(listing.getChannelId());
+            if (channel == null) {
+                continue;
+            }
+            if (j == Constants.COUNT_TOP_LISTINGS) {
+                break;
+            } else {
+                listing.setChannel(channel);
+                listing.setRatio(ratio);
+                topListings.add(listing);
+                j++;
+            }
         }
+        Log.d(TAG, "topListings " + topListings.size());
+        return topListings;
     }
 
-    private class Runner {
+    private static class Runner {
         private final Runnable mRunnable;
         private final long mSeconds;
         private final ScheduledExecutorService mService;
