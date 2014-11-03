@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GarbageCollection</string>
+    <string name="screen_small">Small</string>
+    <string name="screen_normal">Normal</string>
+    <string name="screen_large">Large</string>
+    <string name="screen_xlarge">XLarge</string>
+    <string name="optimize">Optimize</string>
+    <string name="empty">Empty</string>
+</resources>
