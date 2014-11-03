@@ -108,6 +108,19 @@ public class StoreHelper {
         }
     };
 
+
+    public void setChannels(ConcurrentHashMap<Integer, Channel> channels) {
+        mChannels = channels;
+    }
+
+    public void setListings(ConcurrentHashMap<Integer, Listing> listings) {
+        mListings = listings;
+    }
+
+    public void setRatios(ConcurrentHashMap<Integer, Ratio> ratios) {
+        mRatios = ratios;
+    }
+
     public StoreHelper() {
         Log.d(TAG, "Create the new StoreHelper");
         init();
@@ -134,7 +147,7 @@ public class StoreHelper {
         mRunnerRatios.stop();
     }
 
-    public List<Channel> getChannels() {
+    public List<Channel> getAllChannels() {
         return Collections.list(mChannels.elements());
     }
 
@@ -206,6 +219,18 @@ public class StoreHelper {
         }
         Log.d(TAG, "topListings " + topListings.size());
         return topListings;
+    }
+
+    public ConcurrentHashMap<Integer, Channel> getChannels() {
+        return mChannels;
+    }
+
+    public ConcurrentHashMap<Integer, Listing> getListings() {
+        return mListings;
+    }
+
+    public ConcurrentHashMap<Integer, Ratio> getRatios() {
+        return mRatios;
     }
 
     private static class Runner {

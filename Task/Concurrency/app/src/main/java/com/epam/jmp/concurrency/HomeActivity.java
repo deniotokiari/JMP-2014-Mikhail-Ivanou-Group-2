@@ -38,7 +38,7 @@ public class HomeActivity extends Activity {
         public void run() {
             Log.d(TAG, "mRunnableUpdate");
 
-            mAdapterChannels.setData(mStoreHelper.getChannels());
+            mAdapterChannels.setData(mStoreHelper.getAllChannels());
             mAdapterChannels.notifyDataSetChanged();
 
             mAdapterTopChannels.setData(mStoreHelper.getTopChannels());
