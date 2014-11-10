@@ -1,0 +1,78 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>JMP WEB | Registration</title>
+	<meta name="viewport" content="width=device-width, user-scalable=no" />
+</head>
+<body>
+<h1>Форма регистрации</h1>
+<form>
+<table>
+	<tr>
+		<td>ФИО</td>
+		<td><input id="fio" type="text" autofocus required onchange="validate(this.value)"/></td>
+	</tr>
+	<tr>
+		<td>Email</td>
+		<td><input id="email" type="email" required autocomplete="off" multiple /></td>
+	</tr>
+	<tr>
+		<td>Номер телефона</td>
+		<td><input id="phone" type="tel" required pattern="[0-9]{3} [0-9]{3}-[0-9]{2}-[0-9]{2}" placeholder="xxx xxx-xx-xx" /></td>
+	</tr>
+	<tr>
+		<td>Веб-сайт</td>
+		<td><input id="site" type="url" /></td>
+	</tr>
+	<tr>
+		<td>Дата рождения</td>
+		<td><input id="birthday" type="date" onClick="datePicker()" /></td>
+	</tr>
+	<tr>
+		<td>Страна</td>
+		<td>
+			<select id="country" >
+				<option value="by">Belarus</option>
+				<option value="kz">Kazakhstan</option>
+				<option value="ru">Russia</option>
+				<option value="ua">Ukraine</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Адрес</td>
+		<td><textarea id="address"></textarea></td>
+	</tr>
+	<tr>
+		<td>Почтовый индекс</td>
+		<td><input id="index" type="text" /></td>
+	</tr>
+	<tr>		
+		<td colspan="2">
+			<p>Предпочитаемый способ получения уведомлений</p>
+			<input type="radio" name="notification" value="email">По Email</br>
+			<input type="radio" name="notification" value="phone">По телефону</br>
+			<input type="radio" checked name="notification" value="no">Не уведомлять меня</br>
+			<p>Кол-во уведомлений в неделю <input id="notifications" type="number" min="7" max="21" value="7" onClick="notification(this.value)"></p>
+		</td>
+	</tr>
+</table>
+<input type="submit" value="Отправить данные">
+</form>
+<script type="text/javascript">
+    
+    function datePicker() {
+        JMP.datePicker();
+    }
+    
+    function validate(fio) {
+        JMP.validate(fio);
+    }
+
+    function notification(val) {
+        JMP.notification(val);
+    }
+    
+</script>
+</body>
+</html>
