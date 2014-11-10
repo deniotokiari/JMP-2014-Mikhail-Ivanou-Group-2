@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Web</string>
+    <string name="msg_error">The field name can not be less than 3 characters</string>
+
+</resources>
