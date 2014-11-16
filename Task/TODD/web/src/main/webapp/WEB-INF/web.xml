@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
+    <servlet>
+        <servlet-name>AddTaskServlet</servlet-name>
+        <servlet-class>by.todd.web.AddTaskServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddTaskServlet</servlet-name>
+        <url-pattern>/add</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>GetTasksServlet</servlet-name>
+        <servlet-class>by.todd.web.GetTasksServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetTasksServlet</servlet-name>
+        <url-pattern>/get</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>SyncServlet</servlet-name>
+        <servlet-class>by.todd.web.SyncServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SyncServlet</servlet-name>
+        <url-pattern>/sync</url-pattern>
+    </servlet-mapping>
+
+</web-app>
