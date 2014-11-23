@@ -27,4 +27,22 @@
         <url-pattern>/sync</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>LoginExampleServlet</servlet-name>
+        <servlet-class>by.todd.web.LoginExampleServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginExampleServlet</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>LogoutExampleServlet</servlet-name>
+        <servlet-class>by.todd.web.LogoutExampleServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LogoutExampleServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
 </web-app>

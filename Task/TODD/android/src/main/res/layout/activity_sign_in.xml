@@ -3,7 +3,7 @@
     android:background="@color/purple"
     android:layout_height="match_parent">
 
-    <by.todd.ui.widget.RippleButton
+    <by.todd.android.widget.RippleButton
         android:id="@+id/signIn"
         android:layout_width="150dp"
         android:layout_height="150dp"
