@@ -1,7 +1,5 @@
 package by.todd.web;
 
-import com.google.appengine.api.users.User;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,7 +14,6 @@ import by.todd.api.Status;
 import by.todd.entity.Task;
 import by.todd.web.helper.DatabaseHelper;
 import by.todd.web.helper.ResponseHelper;
-import by.todd.web.helper.SecurityHelper;
 
 /**
  * Created by sergey on 16.11.2014.
@@ -25,13 +22,13 @@ public class GetTasksServlet extends BaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-        final User user = SecurityHelper.getCurrentUser(req);
-        if (user == null) {
-            ResponseHelper.write(resp, Status.UNAUTHORIZED);
-            return;
-        }
 
         try {
+            final String owner = req.getParameter(Api.GetTask.PARAM_OWNER);
+            if (owner == null || owner.isEmpty()) {
+                throw new NumberFormatException("Incorrect owner");
+            }
+
             final String pOffset = req.getParameter(Api.GetTask.PARAM_OFFSET);
             final int offset;
             if (pOffset != null) {
@@ -62,7 +59,7 @@ public class GetTasksServlet extends BaseServlet {
                 limit = 0;
             }
 
-            final List<Task> tasks = DatabaseHelper.getTasks(user.getUserId(), offset, limit);
+            final List<Task> tasks = DatabaseHelper.getTasks(owner, offset, limit);
 
             JSONArray jatasks = new JSONArray();
             for (int i = 0; i < tasks.size(); i++) {

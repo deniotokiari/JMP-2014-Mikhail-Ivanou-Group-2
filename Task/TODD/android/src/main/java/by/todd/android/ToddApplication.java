@@ -1,38 +1,33 @@
 package by.todd.android;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import by.todd.entity.User;
 
 /**
  * Created by sergey on 15.11.2014.
  */
 public class ToddApplication extends Application {
 
-    private static AccountManager sAccountManager;
-    private static Account[] sAccounts;
-    private static int sAccountId;
+    private static String mOwner;
+    private static SharedPreferences mPreferences;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        sAccountManager = AccountManager.get(getApplicationContext());
-        sAccounts = sAccountManager.getAccountsByType("com.google");
+
+        mPreferences = getSharedPreferences(".prefs", Context.MODE_PRIVATE);
+        mOwner = mPreferences.getString(User.EMAIL, "");
     }
 
-    public static AccountManager getAccountManager() {
-        return sAccountManager;
+    public static String getOwner() {
+        return mOwner;
     }
 
-    public static Account[] getAccounts() {
-        return sAccounts;
-    }
-
-    public static Account getAccount() {
-        return sAccounts[ToddApplication.sAccountId];
-    }
-
-    public static void setAccountId(int id) {
-        sAccountId = id;
+    public static void setOwner(String owner) {
+        mOwner = owner;
+        mPreferences.edit().putString(User.EMAIL, owner).commit();
     }
 }

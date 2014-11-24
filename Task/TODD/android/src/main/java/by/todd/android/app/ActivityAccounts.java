@@ -3,39 +3,35 @@ package by.todd.android.app;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
-import java.util.Arrays;
+import android.widget.EditText;
 
 import by.todd.android.R;
 import by.todd.android.ToddApplication;
-import by.todd.android.app.adapter.AccountAdapter;
 
 /**
  * Created by sergey on 23.11.2014.
  */
 public class ActivityAccounts extends Activity {
+    private EditText mEmail;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        mEmail = (EditText) findViewById(R.id.email);
+        mEmail.setText(ToddApplication.getOwner());
 
-        AccountAdapter adapter = new AccountAdapter(Arrays.asList(ToddApplication.getAccounts()), R.layout.item_account, this, new View.OnClickListener() {
+        findViewById(R.id.enter).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToddApplication.setAccountId(recyclerView.getChildPosition(v));
-                startActivity(new Intent(getApplicationContext(), ActivityHome.class));
+                ToddApplication.setOwner(mEmail.getEditableText().toString());
+                Intent intent = new Intent(getApplicationContext(), ActivityHome.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         });
-        recyclerView.setAdapter(adapter);
     }
 
 }

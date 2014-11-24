@@ -1,13 +1,21 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/purple"
+    android:orientation="vertical"
     android:padding="50dp">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <EditText
+        android:id="@+id/email"
         android:layout_width="match_parent"
-        android:layout_centerInParent="true"
-        android:layout_height="300dp" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp" />
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/enter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/yellow"
+        android:text="Войти" />
+
+</LinearLayout>

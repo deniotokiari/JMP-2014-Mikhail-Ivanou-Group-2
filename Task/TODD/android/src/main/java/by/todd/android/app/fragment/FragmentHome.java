@@ -19,9 +19,11 @@ import java.util.Collections;
 import java.util.List;
 
 import by.todd.android.R;
+import by.todd.android.ToddApplication;
 import by.todd.android.app.ActivityHome;
 import by.todd.android.app.Success;
 import by.todd.android.app.adapter.TaskHomeAdapter;
+import by.todd.api.Api;
 import by.todd.entity.Task;
 
 /**
@@ -29,6 +31,7 @@ import by.todd.entity.Task;
  */
 public class FragmentHome extends Fragment {
 
+    public static final String TAG = "FragmentHome";
     private RecyclerView mRecyclerView;
     private TaskHomeAdapter mAdapter;
 
@@ -44,6 +47,7 @@ public class FragmentHome extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -62,13 +66,13 @@ public class FragmentHome extends Fragment {
                     List<Task> list = new ArrayList<Task>(length);
 
                     for (int i = 0; i < length; i++) {
-                        list.add(new Task("", (JSONObject) tasks.get(i)));
+                        list.add(new Task((JSONObject) tasks.get(i)));
                     }
                     mAdapter.setData(list);
                 } catch (JSONException e) {
                 }
             }
-        });
+        }, Api.BASE_PATH + Api.GetTask.PATH + ToddApplication.getOwner());
     }
 
 

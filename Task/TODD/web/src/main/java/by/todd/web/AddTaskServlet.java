@@ -1,7 +1,5 @@
 package by.todd.web;
 
-import com.google.appengine.api.users.User;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,7 +16,6 @@ import by.todd.entity.Task;
 import by.todd.web.helper.DatabaseHelper;
 import by.todd.web.helper.InputHelper;
 import by.todd.web.helper.ResponseHelper;
-import by.todd.web.helper.SecurityHelper;
 
 /**
  * Created by sergey on 16.11.2014.
@@ -27,12 +24,6 @@ public class AddTaskServlet extends BaseServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
-        final User user = SecurityHelper.getCurrentUser(req);
-        if (user == null) {
-            ResponseHelper.write(resp, Status.UNAUTHORIZED);
-            return;
-        }
-
         try {
             final String raw = InputHelper.getRaw(req);
 
@@ -43,7 +34,7 @@ public class AddTaskServlet extends BaseServlet {
             List<Task> list = new ArrayList<Task>(length);
 
             for (int i = 0; i < length; i++) {
-                list.add(new Task(user.getUserId(), (JSONObject) tasks.get(i)));
+                list.add(new Task((JSONObject) tasks.get(i)));
             }
 
             DatabaseHelper.addTasks(resp, list);

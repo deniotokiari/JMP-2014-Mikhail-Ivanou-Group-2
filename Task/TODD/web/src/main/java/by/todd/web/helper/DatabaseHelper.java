@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import by.todd.api.Status;
 import by.todd.entity.Task;
+import by.todd.entity.User;
 
 /**
  * Created by sergey on 22.11.2014.
@@ -23,7 +24,49 @@ public class DatabaseHelper {
 
     private static final int DEFAULT_LIMIT = 100;
 
-    public static List<Task> getTasks(String user, int offset, int limit) {
+    public static User getUser(String email) {
+        Query.Filter filter =
+                new Query.FilterPredicate(User.EMAIL,
+                        Query.FilterOperator.EQUAL,
+                        email);
+        Query query = new Query(User.TABLE_NAME).setFilter(filter);
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Entity entityUser = datastore.prepare(query).asSingleEntity();
+        if (entityUser == null) {
+            return null;
+        }
+        return new User(entityUser.getProperties());
+    }
+
+    public static void addUser(HttpServletResponse resp, User user) {
+        if (user == null) {
+            ResponseHelper.write(resp, Status.OK);
+            return;
+        }
+
+        Entity entityUser = new Entity(User.TABLE_NAME);
+        entityUser.setProperty(User.NAME, user.getName());
+        entityUser.setProperty(User.NAME, user.getEmail());
+
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Transaction transaction = datastore.beginTransaction();
+        try {
+            datastore.put(entityUser);
+            transaction.commit();
+        } catch (Exception e) {
+            ResponseHelper.write(resp, e.toString(), Status.INTERNAL_SERVER_ERROR);
+            return;
+        } finally {
+            if (transaction.isActive()) {
+                transaction.rollback();
+                ResponseHelper.write(resp, Status.INTERNAL_SERVER_ERROR);
+                return;
+            }
+        }
+        ResponseHelper.write(resp, Status.CREATED);
+    }
+
+    public static List<Task> getTasks(String owner, int offset, int limit) {
         FetchOptions fo;
         if (limit > 0) {
             fo = FetchOptions.Builder.withLimit(limit);
@@ -37,20 +80,15 @@ public class DatabaseHelper {
         }
 
         Query.Filter userFilter =
-                new Query.FilterPredicate(Task.USER,
+                new Query.FilterPredicate(Task.OWNER,
                         Query.FilterOperator.EQUAL,
-                        user);
-        Query query = new Query(Task.TASK).setFilter(userFilter);
+                        owner);
+        Query query = new Query(Task.TABLE_NAME).setFilter(userFilter);
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         List<Entity> entitiesTasks = datastore.prepare(query).asList(fo);
         List<Task> tasks = new ArrayList<Task>(entitiesTasks.size());
         for (Entity task : entitiesTasks) {
-            String title = (String) task.getProperty(Task.TITLE);
-            String content = (String) task.getProperty(Task.CONTENT);
-            String timestamp = (String) task.getProperty(Task.TIMESTAMP);
-            String tags = (String) task.getProperty(Task.TAGS);
-
-            tasks.add(new Task(user, title, content, timestamp, tags));
+            tasks.add(new Task(task.getProperties()));
         }
         return tasks;
     }
@@ -63,8 +101,8 @@ public class DatabaseHelper {
 
         List<Entity> entitiesTasks = new ArrayList<Entity>(tasks.size());
         for (Task task : tasks) {
-            Entity entityTask = new Entity(Task.TASK);
-            entityTask.setProperty(Task.USER, task.getUser());
+            Entity entityTask = new Entity(Task.TABLE_NAME);
+            entityTask.setProperty(Task.OWNER, task.getOwner());
             entityTask.setProperty(Task.TITLE, task.getTitle());
             entityTask.setProperty(Task.CONTENT, task.getContent());
             entityTask.setProperty(Task.TIMESTAMP, task.getTimestamp());

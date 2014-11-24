@@ -18,7 +18,7 @@
         <url-pattern>/get</url-pattern>
     </servlet-mapping>
 
-    <servlet>
+    <!--<servlet>
         <servlet-name>SyncServlet</servlet-name>
         <servlet-class>by.todd.web.SyncServlet</servlet-class>
     </servlet>
@@ -43,6 +43,6 @@
     <servlet-mapping>
         <servlet-name>LogoutExampleServlet</servlet-name>
         <url-pattern>/logout</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>-->
 
 </web-app>
