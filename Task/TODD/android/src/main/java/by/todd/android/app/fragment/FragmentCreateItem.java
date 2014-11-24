@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,10 +44,15 @@ public class FragmentCreateItem extends Fragment {
     public void save() {
         String title = getEditText(R.id.taskTitle);
         String content = getEditText(R.id.taskContent);
+        if (title.isEmpty() && content.isEmpty()) {
+            Toast.makeText(getActivity(), "Что-нибудь нужно заполнить", Toast.LENGTH_SHORT).show();
+            return;
+        }
         String tags = getEditText(R.id.taskTags);
 
         String user = ToddApplication.getOwner();
-        String timestamp = "timestamp";
+        Long tsLong = System.currentTimeMillis() / 1000;
+        String timestamp = tsLong.toString();
         Task task = new Task(user, title, content, timestamp, tags);
         JSONObject jo = new JSONObject();
         JSONArray ja = new JSONArray();
@@ -59,7 +65,7 @@ public class FragmentCreateItem extends Fragment {
         ((ActivityHome) getActivity()).post(jo, new Success() {
             @Override
             public void success(String content) {
-
+                getActivity().getSupportFragmentManager().popBackStack();
             }
         }, Api.BASE_PATH + Api.AddTask.PATH);
 

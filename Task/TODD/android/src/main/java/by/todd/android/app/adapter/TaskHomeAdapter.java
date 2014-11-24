@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import by.todd.android.R;
@@ -26,6 +29,16 @@ public class TaskHomeAdapter extends RecyclerView.Adapter<TaskHomeAdapter.ViewHo
         mContext = context;
     }
 
+    private String getDate(long timeStamp) {
+        try {
+            DateFormat sdf = new SimpleDateFormat("hh:mm dd/MM/yyyy");
+            Date netDate = (new Date(timeStamp));
+            return sdf.format(netDate);
+        } catch (Exception ex) {
+            return "xx";
+        }
+    }
+
     public void setData(List<Task> tasks) {
         mTasks = tasks;
         notifyDataSetChanged();
@@ -43,8 +56,12 @@ public class TaskHomeAdapter extends RecyclerView.Adapter<TaskHomeAdapter.ViewHo
         viewHolder.mTaskTitle.setText(task.getTitle());
         viewHolder.mTaskContent.setText(task.getContent());
         viewHolder.mTaskTags.setText(task.getTags());
-        viewHolder.mTaskTimestamp.setText(task.getTimestamp());
-
+        String timestamp = task.getTimestamp();
+        if (timestamp != null) {
+            viewHolder.mTaskTimestamp.setText(getDate(Long.valueOf(timestamp) * 1000));
+        } else {
+            viewHolder.mTaskTimestamp.setText("");
+        }
     }
 
     @Override
@@ -65,8 +82,6 @@ public class TaskHomeAdapter extends RecyclerView.Adapter<TaskHomeAdapter.ViewHo
             mTaskContent = (TextView) itemView.findViewById(R.id.taskContent);
             mTaskTags = (TextView) itemView.findViewById(R.id.taskTags);
             mTaskTimestamp = (TextView) itemView.findViewById(R.id.taskTimestamp);
-
-
         }
     }
 }
