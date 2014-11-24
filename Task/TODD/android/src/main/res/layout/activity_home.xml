@@ -13,7 +13,18 @@
 
     <FrameLayout
         android:id="@+id/container"
-        android:layout_below="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar" />
+
+    <by.todd.android.widget.RippleButton
+        android:id="@+id/add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="30dp"
+        android:background="@color/red"
+        android:padding="10dp"
+        android:src="@drawable/ic_sign_in" />
 </RelativeLayout>

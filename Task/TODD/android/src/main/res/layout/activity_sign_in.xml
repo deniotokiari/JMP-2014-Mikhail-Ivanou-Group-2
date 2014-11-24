@@ -1,14 +1,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/purple"
-    android:layout_height="match_parent">
+    android:padding="50dp">
 
-    <by.todd.android.widget.RippleButton
-        android:id="@+id/signIn"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
         android:layout_centerInParent="true"
-        android:background="@color/green_2"
-        android:src="@drawable/ic_sign_in" />
+        android:layout_height="300dp" />
 
 </RelativeLayout>

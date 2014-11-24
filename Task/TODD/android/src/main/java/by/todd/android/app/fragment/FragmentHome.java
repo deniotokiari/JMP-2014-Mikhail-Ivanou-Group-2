@@ -1,6 +1,5 @@
 package by.todd.android.app.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,13 +9,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import by.todd.R;
+import by.todd.android.R;
+import by.todd.android.app.ActivityHome;
+import by.todd.android.app.Success;
+import by.todd.android.app.adapter.TaskHomeAdapter;
+import by.todd.entity.Task;
 
 /**
  * Created by sergey on 14.11.2014.
@@ -24,7 +30,7 @@ import by.todd.R;
 public class FragmentHome extends Fragment {
 
     private RecyclerView mRecyclerView;
-    private CountryAdapter mAdapter;
+    private TaskHomeAdapter mAdapter;
 
     public static FragmentHome newInstance() {
         return new FragmentHome();
@@ -42,28 +48,29 @@ public class FragmentHome extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        List<String> list=new ArrayList<String>();
-        list.add("1");
-        list.add("2");
-        list.add("3");
-        list.add("4");
-        list.add("5");
-        list.add("6");
-        list.addAll(list);
-        list.addAll(list);
-        list.addAll(list);
-        list.addAll(list);
-        list.addAll(list);
-        list.addAll(list);
-        list.addAll(list);
-        list.addAll(list);
-        list.addAll(list);
-        list.addAll(list);
-        list.addAll(list);
-        list.addAll(list);
-        mAdapter = new CountryAdapter(list, R.layout.item_home, getActivity());
+        mAdapter = new TaskHomeAdapter(Collections.EMPTY_LIST, R.layout.item_task_home, getActivity());
         mRecyclerView.setAdapter(mAdapter);
+
+        ((ActivityHome) getActivity()).get(new Success() {
+            @Override
+            public void success(String content) {
+                try {
+                    final JSONObject jo = new JSONObject(content);
+                    final JSONArray tasks = jo.getJSONArray(Task.TASKS);
+
+                    int length = tasks.length();
+                    List<Task> list = new ArrayList<Task>(length);
+
+                    for (int i = 0; i < length; i++) {
+                        list.add(new Task("", (JSONObject) tasks.get(i)));
+                    }
+                    mAdapter.setData(list);
+                } catch (JSONException e) {
+                }
+            }
+        });
     }
+
 
     private View findViewById(int id) {
         View view = getView();
@@ -73,44 +80,4 @@ public class FragmentHome extends Fragment {
         return view.findViewById(id);
     }
 
-    private static class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHolder> {
-        private List<String> countries;
-        private int rowLayout;
-        private Context mContext;
-
-        public CountryAdapter(List<String> countries, int rowLayout, Context context) {
-            this.countries = countries;
-            this.rowLayout = rowLayout;
-            this.mContext = context;
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View v = LayoutInflater.from(viewGroup.getContext()).inflate(rowLayout, viewGroup, false);
-            return new ViewHolder(v);
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder viewHolder, int i) {
-            String country = countries.get(i);
-            viewHolder.countryName.setText(country);
-            viewHolder.countryImage.setImageResource(R.drawable.ic_launcher);
-        }
-
-        @Override
-        public int getItemCount() {
-            return countries == null ? 0 : countries.size();
-        }
-
-        public static class ViewHolder extends RecyclerView.ViewHolder {
-            public TextView countryName;
-            public ImageView countryImage;
-
-            public ViewHolder(View itemView) {
-                super(itemView);
-                countryName = (TextView) itemView.findViewById(R.id.countryName);
-                countryImage = (ImageView) itemView.findViewById(R.id.countryImage);
-            }
-        }
-    }
 }
