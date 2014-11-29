@@ -1,0 +1,30 @@
+Download and Install TeamCity https://www.jetbrains.com/teamcity/download/
+
+Restore data from file
+
+List of users
+	Administrator:
+		sergey/sergey
+		admin/admin
+
+	Developers:
+		dev/dev
+
+!!!Android Sdk Folder for CI = D:\android\studio\sdk
+
+User Management
+	Users http://localhost:81/admin/admin.html?item=users
+	Groups http://localhost:81/admin/admin.html?item=groups
+
+Disable access for guest users (checkbox in General settings section)
+http://localhost:81/admin/admin.html?item=auth
+
+
+Set correct Email Notifier by url http://localhost:81/admin/admin.html?item=email
+Set email address for user by url http://localhost:81/profile.html
+
+
+Notofocation rules
+	for DEVELOPERS http://localhost:81/admin/editGroup.html?groupCode=DEVELOPERS&tab=groupNotifications
+
+	for ADMIN http://localhost:81/admin/editGroup.html?groupCode=ADMIN&tab=groupNotifications
