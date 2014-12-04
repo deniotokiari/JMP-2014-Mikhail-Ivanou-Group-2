@@ -1,0 +1,40 @@
+Employee
+[
+  '{{repeat(5, 7)}}',
+  {
+    isActive: '{{bool()}}',    
+    age: '{{integer(20, 40)}}',
+    name: '{{firstName()}} {{surname()}}',    
+    email: '{{email()}}',
+    status: function (tags) {
+      var status = ['BUSY', 'AVAILABLE', 'UNKNOWN'];
+      return status[tags.integer(0, status.length - 1)];
+    },
+    address: {
+      country: '{{country()}}',
+      city: '{{city()}}',
+      street: '{{street()}}',
+      postalCode: '{{integer(100, 10000)}}'
+    }
+  }
+]
+
+
+Project
+[
+  '{{repeat(5, 7)}}',
+  {
+    name: '{{firstName()}}',
+    start: '{{date(new Date(2014, 0, 1), new Date(), "YYYY-MM-ddThh:mm:ss Z")}}',
+    about: '{{lorem(1, "paragraphs")}}'
+  }
+]
+
+Unit
+[
+  '{{repeat(5, 7)}}',
+  {
+    about: '{{firstName()}}',
+    number: '{{index()}}'    
+  }
+]
