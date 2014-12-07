@@ -49,16 +49,6 @@ public class EmployeeProcessor extends AbstractStringProcessor<JSONArray> {
         mDbContentProvider.bulkInsertOrUpdate(ModelContract.getUri(Employee.class), values);
         long t = (System.currentTimeMillis() - start) / length;
         Log.e("RESULT XCORE", "createEmployee avg = " + t);
-
-        findEmployeeById();
-    }
-
-    private void findEmployeeById() {
-        String sql = "SELECT * FROM " + DBHelper.getTableName(Employee.class) + " WHERE " + Employee.ID + " = 1";
-        long start = System.currentTimeMillis();
-        List<ContentValues> unit = ContentUtils.getEntitiesFromSQL(ContextHolder.get(), sql);
-        long t = (System.currentTimeMillis() - start);
-        Log.e("RESULT XCORE", "findEmployeeById = " + t);
     }
 
     @Override

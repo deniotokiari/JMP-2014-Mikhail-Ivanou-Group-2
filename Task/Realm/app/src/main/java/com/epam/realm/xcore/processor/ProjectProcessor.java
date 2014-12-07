@@ -47,18 +47,7 @@ public class ProjectProcessor extends AbstractStringProcessor<JSONArray> {
         mDbContentProvider.bulkInsertOrUpdate(ModelContract.getUri(Project.class), values);
         long t = (System.currentTimeMillis() - start) / length;
         Log.e("RESULT XCORE", "createProjects avg = " + t);
-
-        findProjectById();
     }
-
-    private void findProjectById() {
-        String sql = "SELECT * FROM " + DBHelper.getTableName(Project.class) + " WHERE " + Project.ID + " = 1";
-        long start = System.currentTimeMillis();
-        List<ContentValues> project = ContentUtils.getEntitiesFromSQL(ContextHolder.get(), sql);
-        long t = (System.currentTimeMillis() - start);
-        Log.e("RESULT XCORE", "findProjectById = " + t);
-    }
-
 
     @Override
     public String getAppServiceKey() {

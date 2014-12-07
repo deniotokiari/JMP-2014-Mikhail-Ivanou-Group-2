@@ -46,17 +46,9 @@ public class UnitProcessor extends AbstractStringProcessor<JSONArray> {
         mDbContentProvider.bulkInsertOrUpdate(ModelContract.getUri(Unit.class), values);
         long t = (System.currentTimeMillis() - start) / length;
         Log.e("RESULT XCORE", "createUnits avg = " + t);
-
-        findUnitById();
     }
 
-    private void findUnitById() {
-        String sql = "SELECT * FROM " + DBHelper.getTableName(Unit.class) + " WHERE " + Unit.ID + " = 1";
-        long start = System.currentTimeMillis();
-        List<ContentValues> unit = ContentUtils.getEntitiesFromSQL(ContextHolder.get(), sql);
-        long t = (System.currentTimeMillis() - start);
-        Log.e("RESULT XCORE", "findUnitById = " + t);
-    }
+
 
     @Override
     public String getAppServiceKey() {

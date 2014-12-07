@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.util.Log;
 
 import com.epam.realm.DataProvider;
+import com.epam.realm.xcore.model.Employee;
 import com.epam.realm.xcore.model.Project;
 import com.epam.realm.xcore.model.Unit;
 import com.epam.realm.xcore.processor.EmployeeProcessor;
@@ -32,34 +33,16 @@ public class XcoreImpl {
     }
 
     public void start() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                createUnit();
-                createProject();
-                createEmployee();
-            }
-        }
-        ).start();
+        testCreateUnit();
+        testCreateProject();
+        testCreateEmployee();
+
+        testFindEmployeeById();
+        testFindProjectById();
+        testFindUnitById();
     }
 
-
-    public void createEmployee() {
-        DataSourceRequest request = new DataSourceRequest(DataProvider.FILE_EMPLOYEE);
-        request.setCacheable(true);
-        request.setForceUpdateData(true);
-
-        final Core.IExecuteOperation operation = new Core.ExecuteOperationBuilder()
-                .setActivity(mContext)
-                .setDataSourceKey(AssetsDataSource.KEY)
-                .setProcessorKey(EmployeeProcessor.KEY)
-                .setDataSourceRequest(request)
-                .build();
-
-        Core.get(mContext).execute(operation);
-    }
-
-    public void createUnit() {
+    private void testCreateUnit() {
         DataSourceRequest request = new DataSourceRequest(DataProvider.FILE_UNIT);
         request.setCacheable(true);
         request.setForceUpdateData(true);
@@ -74,7 +57,7 @@ public class XcoreImpl {
         Core.get(mContext).execute(operation);
     }
 
-    public void createProject() {
+    private void testCreateProject() {
         DataSourceRequest request = new DataSourceRequest(DataProvider.FILE_PROJECT);
         request.setCacheable(true);
         request.setForceUpdateData(true);
@@ -88,5 +71,45 @@ public class XcoreImpl {
 
         Core.get(mContext).execute(operation);
     }
+
+    private void testCreateEmployee() {
+        DataSourceRequest request = new DataSourceRequest(DataProvider.FILE_EMPLOYEE);
+        request.setCacheable(true);
+        request.setForceUpdateData(true);
+
+        final Core.IExecuteOperation operation = new Core.ExecuteOperationBuilder()
+                .setActivity(mContext)
+                .setDataSourceKey(AssetsDataSource.KEY)
+                .setProcessorKey(EmployeeProcessor.KEY)
+                .setDataSourceRequest(request)
+                .build();
+
+        Core.get(mContext).execute(operation);
+    }
+
+    private void testFindUnitById() {
+        String sql = "SELECT * FROM " + DBHelper.getTableName(Unit.class) + " WHERE " + Unit.ID + " = 1";
+        long start = System.currentTimeMillis();
+        List<ContentValues> unit = ContentUtils.getEntitiesFromSQL(ContextHolder.get(), sql);
+        long t = (System.currentTimeMillis() - start);
+        Log.e("RESULT XCORE", "findUnitById = " + t);
+    }
+
+    private void testFindProjectById() {
+        String sql = "SELECT * FROM " + DBHelper.getTableName(Project.class) + " WHERE " + Project.ID + " = 1";
+        long start = System.currentTimeMillis();
+        List<ContentValues> project = ContentUtils.getEntitiesFromSQL(ContextHolder.get(), sql);
+        long t = (System.currentTimeMillis() - start);
+        Log.e("RESULT XCORE", "findProjectById = " + t);
+    }
+
+    private void testFindEmployeeById() {
+        String sql = "SELECT * FROM " + DBHelper.getTableName(Employee.class) + " WHERE " + Employee.ID + " = 1";
+        long start = System.currentTimeMillis();
+        List<ContentValues> unit = ContentUtils.getEntitiesFromSQL(ContextHolder.get(), sql);
+        long t = (System.currentTimeMillis() - start);
+        Log.e("RESULT XCORE", "findEmployeeById = " + t);
+    }
+
 
 }
