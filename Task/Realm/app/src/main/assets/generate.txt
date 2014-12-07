@@ -1,14 +1,19 @@
 Employee
 [
-  '{{repeat(5, 7)}}',
+  '{{repeat(100)}}',
   {
-    isActive: '{{bool()}}',    
-    age: '{{integer(20, 40)}}',
-    name: '{{firstName()}} {{surname()}}',    
+    id: '{{index()}}',
+    name: '{{firstName()}} {{surname()}}',
     email: '{{email()}}',
+    age: '{{integer(20, 40)}}',
     status: function (tags) {
       var status = ['BUSY', 'AVAILABLE', 'UNKNOWN'];
       return status[tags.integer(0, status.length - 1)];
+    },
+    personal: {
+      unit: '{{integer(0,50)}}',      
+      curProject: '{{integer(0,50)}}'
+      
     },
     address: {
       country: '{{country()}}',
@@ -22,19 +27,19 @@ Employee
 
 Project
 [
-  '{{repeat(5, 7)}}',
+  '{{repeat(50)}}',
   {
-    name: '{{firstName()}}',
-    start: '{{date(new Date(2014, 0, 1), new Date(), "YYYY-MM-ddThh:mm:ss Z")}}',
+    id: '{{index()}}',
+    name: '{{company()}}',
     about: '{{lorem(1, "paragraphs")}}'
   }
 ]
 
 Unit
 [
-  '{{repeat(5, 7)}}',
+  '{{repeat(50)}}',
   {
-    about: '{{firstName()}}',
-    number: '{{index()}}'    
+    id: '{{index()}}',
+    title: 'room-{{index()}}'    
   }
 ]

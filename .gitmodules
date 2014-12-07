@@ -1,0 +1,3 @@
+[submodule "Task/Realm/xcore"]
+	path = Task/Realm/xcore
+	url = https://github.com/IstiN/android_xcore.git
