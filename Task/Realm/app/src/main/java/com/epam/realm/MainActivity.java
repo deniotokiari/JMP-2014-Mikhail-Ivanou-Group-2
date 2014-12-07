@@ -40,16 +40,16 @@ public class MainActivity extends Activity {
                 findProjectById(mProvider.getFeedProjects().length());
                 findUnitById(mProvider.getFeedUnits().length());
 
-                deleteEmployeeById(mProvider.getFeedEmployees().length());
+                /*deleteEmployeeById(mProvider.getFeedEmployees().length());
                 deleteProjectById(mProvider.getFeedProjects().length());
-                deleteUnitById(mProvider.getFeedUnits().length());
+                deleteUnitById(mProvider.getFeedUnits().length());*/
 
                 mXcore.start();
             }
         }).start();
     }
 
-    private void deleteEmployeeById(int max) {
+    /*private void deleteEmployeeById(int max) {
         long start = System.currentTimeMillis();
         for (int i = 0; i < max; i++) {
             mRealm.deleteEmployeeById(i);
@@ -74,7 +74,7 @@ public class MainActivity extends Activity {
         }
         long t = (System.currentTimeMillis() - start) / max;
         Log.e("RESULT REALM", "deleteUnitById avg = " + t);
-    }
+    }*/
 
     private void findEmployeeById(int max) {
         long start = System.currentTimeMillis();
