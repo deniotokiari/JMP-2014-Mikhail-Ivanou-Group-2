@@ -1,15 +1,20 @@
 package com.epam.realm.realm.model;
 
+import io.realm.RealmList;
+import io.realm.RealmObject;
+
 /**
  * Created by sergey on 03.12.2014.
  */
-public class Employee {
+public class RealmEmployee extends RealmObject {
     private int id;
     private String name;
     private String email;
     private int age;
     private String status;
-
+    private RealmPersonal personal;
+    private RealmAddress address;
+    private RealmList<RealmProject> projects;
 
     public int getId() {
         return id;
@@ -51,4 +56,27 @@ public class Employee {
         this.status = status;
     }
 
+    public RealmPersonal getPersonal() {
+        return personal;
+    }
+
+    public void setPersonal(RealmPersonal personal) {
+        this.personal = personal;
+    }
+
+    public RealmAddress getAddress() {
+        return address;
+    }
+
+    public void setAddress(RealmAddress address) {
+        this.address = address;
+    }
+
+    public RealmList<RealmProject> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(RealmList<RealmProject> projects) {
+        this.projects = projects;
+    }
 }

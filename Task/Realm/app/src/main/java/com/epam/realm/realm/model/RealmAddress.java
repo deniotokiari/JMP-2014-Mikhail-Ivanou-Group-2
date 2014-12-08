@@ -1,9 +1,11 @@
 package com.epam.realm.realm.model;
 
+import io.realm.RealmObject;
+
 /**
  * Created by sergey on 06.12.2014.
  */
-public class Address  {
+public class RealmAddress extends RealmObject {
     private String country;
     private String city;
     private String street;

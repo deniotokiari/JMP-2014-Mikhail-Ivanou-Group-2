@@ -2,15 +2,9 @@ package com.epam.realm;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.epam.realm.realm.RealmImpl;
-import com.epam.realm.realm.model.Employee;
-import com.epam.realm.realm.model.Project;
-import com.epam.realm.realm.model.Unit;
 import com.epam.realm.xcore.XcoreImpl;
-
-import org.json.JSONArray;
 
 
 public class MainActivity extends Activity {

@@ -6,6 +6,9 @@ import android.util.Log;
 import com.epam.realm.DataProvider;
 import com.epam.realm.realm.model.Employee;
 import com.epam.realm.realm.model.Project;
+import com.epam.realm.realm.model.RealmEmployee;
+import com.epam.realm.realm.model.RealmProject;
+import com.epam.realm.realm.model.RealmUnit;
 import com.epam.realm.realm.model.Unit;
 
 import java.io.File;
@@ -63,8 +66,8 @@ public class RealmImpl {
         }
     }
 
-    private Unit createUnit(Unit obj) {
-        Unit realmUnit = mRealm.createObject(Unit.class);
+    private RealmUnit createUnit(Unit obj) {
+        RealmUnit realmUnit = mRealm.createObject(RealmUnit.class);
         realmUnit.setId(obj.getId());
         realmUnit.setTitle(obj.getTitle());
         return realmUnit;
@@ -88,8 +91,8 @@ public class RealmImpl {
         }
     }
 
-    private Project createProject(Project obj) {
-        Project realmProject = mRealm.createObject(Project.class);
+    private RealmProject createProject(Project obj) {
+        RealmProject realmProject = mRealm.createObject(RealmProject.class);
         realmProject.setId(obj.getId());
         realmProject.setName(obj.getName());
         realmProject.setAbout(obj.getAbout());
@@ -114,8 +117,8 @@ public class RealmImpl {
         }
     }
 
-    private Employee createEmployee(Employee obj) {
-        Employee realmEmployee = mRealm.createObject(Employee.class);
+    private RealmEmployee createEmployee(Employee obj) {
+        RealmEmployee realmEmployee = mRealm.createObject(RealmEmployee.class);
         realmEmployee.setId(obj.getId());
         realmEmployee.setName(obj.getName());
         realmEmployee.setEmail(obj.getEmail());
@@ -128,7 +131,7 @@ public class RealmImpl {
     private void testFindEmployeeById(int max) {
         long start = System.currentTimeMillis();
         for (int i = 0; i < max; i++) {
-            mRealm.where(Employee.class).equalTo("id", i).findFirst();
+            mRealm.where(RealmEmployee.class).equalTo("id", i).findFirst();
         }
         long t = (System.currentTimeMillis() - start) / max;
         Log.e("RESULT REALM", "findEmployeeById avg = " + t);
@@ -137,7 +140,7 @@ public class RealmImpl {
     private void testFindProjectById(int max) {
         long start = System.currentTimeMillis();
         for (int i = 0; i < max; i++) {
-            mRealm.where(Project.class).equalTo("id", i).findFirst();
+            mRealm.where(RealmProject.class).equalTo("id", i).findFirst();
         }
         long t = (System.currentTimeMillis() - start) / max;
         Log.e("RESULT REALM", "findProjectById avg = " + t);
@@ -146,7 +149,7 @@ public class RealmImpl {
     private void testFindUnitById(int max) {
         long start = System.currentTimeMillis();
         for (int i = 0; i < max; i++) {
-            mRealm.where(Unit.class).equalTo("id", i).findFirst();
+            mRealm.where(RealmUnit.class).equalTo("id", i).findFirst();
         }
         long t = (System.currentTimeMillis() - start) / max;
         Log.e("RESULT REALM", "findUnitById avg = " + t);
