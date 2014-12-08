@@ -18,9 +18,20 @@ public class Unit implements BaseColumns, IGenerateID {
 
     @dbInteger
     public static final String ID = "id";
+    int id;
+
+    public int getId() {
+        return id;
+    }
+
 
     @dbString
     public static final String TITLE = "title";
+    String title;
+
+    public String getTitle() {
+        return title;
+    }
 
     @Override
     public long generateId(DBHelper dbHelper, IDBConnection db, DataSourceRequest dataSourceRequest, ContentValues contentValues) {

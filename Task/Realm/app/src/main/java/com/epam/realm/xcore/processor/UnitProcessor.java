@@ -5,24 +5,17 @@ import android.content.Context;
 import android.util.Log;
 
 import com.epam.realm.xcore.model.Unit;
+import com.google.gson.Gson;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.List;
-
-import by.istin.android.xcore.ContextHolder;
-import by.istin.android.xcore.db.impl.DBHelper;
 import by.istin.android.xcore.processor.impl.AbstractStringProcessor;
 import by.istin.android.xcore.provider.IDBContentProviderSupport;
 import by.istin.android.xcore.provider.ModelContract;
 import by.istin.android.xcore.source.DataSourceRequest;
-import by.istin.android.xcore.utils.ContentUtils;
 
 /**
  * Created by sergey on 07.12.2014.
  */
-public class UnitProcessor extends AbstractStringProcessor<JSONArray> {
+public class UnitProcessor extends AbstractStringProcessor<Unit[]> {
 
     public static final String KEY = "processor:unit";
     private final IDBContentProviderSupport mDbContentProvider;
@@ -32,23 +25,25 @@ public class UnitProcessor extends AbstractStringProcessor<JSONArray> {
     }
 
     @Override
-    public void cache(Context context, DataSourceRequest dataSourceRequest, JSONArray jsonArray) throws Exception {
-        int length = jsonArray.length();
+    public void cache(Context context, DataSourceRequest dataSourceRequest, Unit[] units) throws Exception {
+        int length = units.length;
         ContentValues[] values = new ContentValues[length];
+        long start = System.currentTimeMillis();
         for (int i = 0; i < length; i++) {
-            JSONObject obj = jsonArray.getJSONObject(i);
+            Unit unit = units[i];
             ContentValues val = new ContentValues();
-            val.put(Unit.ID, obj.getInt(Unit.ID));
-            val.put(Unit.TITLE, obj.getString(Unit.TITLE));
+            val.put(Unit.ID, unit.getId());
+            val.put(Unit.TITLE, unit.getTitle());
             values[i] = val;
         }
-        long start = System.currentTimeMillis();
-        mDbContentProvider.bulkInsertOrUpdate(ModelContract.getUri(Unit.class), values);
         long t = (System.currentTimeMillis() - start) / length;
+        Log.e("RESULT XCORE", "[read] createUnits avg = " + t);
+
+        start = System.currentTimeMillis();
+        mDbContentProvider.bulkInsertOrUpdate(ModelContract.getUri(Unit.class), values);
+        t = (System.currentTimeMillis() - start) / length;
         Log.e("RESULT XCORE", "createUnits avg = " + t);
     }
-
-
 
     @Override
     public String getAppServiceKey() {
@@ -56,7 +51,9 @@ public class UnitProcessor extends AbstractStringProcessor<JSONArray> {
     }
 
     @Override
-    protected JSONArray convert(String string) throws Exception {
-        return new JSONArray(string);
+    protected Unit[] convert(String string) throws Exception {
+        Gson gson = new Gson();
+        Unit[] units = gson.fromJson(string, Unit[].class);
+        return units;
     }
 }

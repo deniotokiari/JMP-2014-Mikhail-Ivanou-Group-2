@@ -18,18 +18,44 @@ import by.istin.android.xcore.utils.HashUtils;
 public class Employee implements BaseColumns, IGenerateID {
     @dbInteger
     public static final String ID = "id";
+    int id;
+
+    public int getId() {
+        return id;
+    }
 
     @dbString
     public static final String NAME = "name";
 
+    String name;
+
+    public String getName() {
+        return name;
+    }
+
     @dbString
     public static final String EMAIL = "email";
+    String email;
+
+    public String getEmail() {
+        return email;
+    }
 
     @dbInteger
     public static final String AGE = "age";
+    int age;
+
+    public int getAge() {
+        return age;
+    }
 
     @dbString
     public static final String STATUS = "status";
+    String status;
+
+    public String getStatus() {
+        return status;
+    }
 
     @dbEntities(clazz = Personal.class)
     public static final String PERSONAL = "personal";

@@ -18,12 +18,27 @@ import by.istin.android.xcore.utils.HashUtils;
 public class Project implements BaseColumns, IGenerateID {
     @dbInteger
     public static final String ID = "id";
+    int id;
+
+    public int getId() {
+        return id;
+    }
 
     @dbString
     public static final String NAME = "name";
+    String name;
+
+    public String getName() {
+        return name;
+    }
 
     @dbString
     public static final String ABOUT = "about";
+    String about;
+
+    public String getAbout() {
+        return about;
+    }
 
     @dbEntities(clazz = Employee.class)
     public static final String EMPLOYEES = "employees";

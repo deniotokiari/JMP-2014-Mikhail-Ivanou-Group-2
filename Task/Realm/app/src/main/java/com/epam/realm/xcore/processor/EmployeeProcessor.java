@@ -5,24 +5,17 @@ import android.content.Context;
 import android.util.Log;
 
 import com.epam.realm.xcore.model.Employee;
+import com.google.gson.Gson;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.List;
-
-import by.istin.android.xcore.ContextHolder;
-import by.istin.android.xcore.db.impl.DBHelper;
 import by.istin.android.xcore.processor.impl.AbstractStringProcessor;
 import by.istin.android.xcore.provider.IDBContentProviderSupport;
 import by.istin.android.xcore.provider.ModelContract;
 import by.istin.android.xcore.source.DataSourceRequest;
-import by.istin.android.xcore.utils.ContentUtils;
 
 /**
  * Created by sergey on 07.12.2014.
  */
-public class EmployeeProcessor extends AbstractStringProcessor<JSONArray> {
+public class EmployeeProcessor extends AbstractStringProcessor<Employee[]> {
 
     public static final String KEY = "processor:employee";
     private final IDBContentProviderSupport mDbContentProvider;
@@ -32,22 +25,26 @@ public class EmployeeProcessor extends AbstractStringProcessor<JSONArray> {
     }
 
     @Override
-    public void cache(Context context, DataSourceRequest dataSourceRequest, JSONArray jsonArray) throws Exception {
-        int length = jsonArray.length();
+    public void cache(Context context, DataSourceRequest dataSourceRequest, Employee[] jsonArray) throws Exception {
+        int length = jsonArray.length;
         ContentValues[] values = new ContentValues[length];
+        long start = System.currentTimeMillis();
         for (int i = 0; i < length; i++) {
-            JSONObject obj = jsonArray.getJSONObject(i);
+            Employee obj = jsonArray[i];
             ContentValues val = new ContentValues();
-            val.put(Employee.ID, obj.getInt(Employee.ID));
-            val.put(Employee.NAME, obj.getString(Employee.NAME));
-            val.put(Employee.EMAIL, obj.getString(Employee.EMAIL));
-            val.put(Employee.AGE, obj.getInt(Employee.AGE));
-            val.put(Employee.STATUS, obj.getString(Employee.STATUS));
+            val.put(Employee.ID, obj.getId());
+            val.put(Employee.NAME, obj.getName());
+            val.put(Employee.EMAIL, obj.getEmail());
+            val.put(Employee.AGE, obj.getAge());
+            val.put(Employee.STATUS, obj.getStatus());
             values[i] = val;
         }
-        long start = System.currentTimeMillis();
-        mDbContentProvider.bulkInsertOrUpdate(ModelContract.getUri(Employee.class), values);
         long t = (System.currentTimeMillis() - start) / length;
+        Log.e("RESULT XCORE", "[read] createEmployee avg = " + t);
+
+        start = System.currentTimeMillis();
+        mDbContentProvider.bulkInsertOrUpdate(ModelContract.getUri(Employee.class), values);
+        t = (System.currentTimeMillis() - start) / length;
         Log.e("RESULT XCORE", "createEmployee avg = " + t);
     }
 
@@ -57,7 +54,9 @@ public class EmployeeProcessor extends AbstractStringProcessor<JSONArray> {
     }
 
     @Override
-    protected JSONArray convert(String string) throws Exception {
-        return new JSONArray(string);
+    protected Employee[] convert(String string) throws Exception {
+        Gson gson = new Gson();
+        Employee[] units = gson.fromJson(string, Employee[].class);
+        return units;
     }
 }

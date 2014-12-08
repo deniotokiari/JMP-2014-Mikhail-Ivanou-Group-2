@@ -60,21 +60,26 @@ public class RealmImpl {
                 createUnit(feed.getJSONObject(i));
             }
             long t = (System.currentTimeMillis() - start) / size;
+            Log.e("RESULT REALM", "[read] createUnits avg = " + t);
+            start = System.currentTimeMillis();
             mRealm.commitTransaction();
+            t = (System.currentTimeMillis() - start) / size;
             Log.e("RESULT REALM", "createUnits avg = " + t);
         } catch (Exception e) {
         }
     }
 
-    private void createUnit(JSONObject obj) {
+    private Unit createUnit(JSONObject obj) {
         try {
             Unit realmUnit = mRealm.createObject(Unit.class);
             realmUnit.setId(obj.getInt("id"));
             realmUnit.setTitle(obj.getString("title"));
+            return realmUnit;
         } catch (JSONException e) {
             Log.e(TAG, "error " + e);
         }
         Log.d(TAG, "createUnit " + obj);
+        return null;
     }
 
     private void testCreateProjects(JSONArray feed) {
@@ -86,22 +91,27 @@ public class RealmImpl {
                 createProject(feed.getJSONObject(i));
             }
             long t = (System.currentTimeMillis() - start) / size;
+            Log.e("RESULT REALM", "[read] createProjects avg = " + t);
+            start = System.currentTimeMillis();
             mRealm.commitTransaction();
+            t = (System.currentTimeMillis() - start) / size;
             Log.e("RESULT REALM", "createProjects avg = " + t);
         } catch (Exception e) {
         }
     }
 
-    private void createProject(JSONObject obj) {
+    private Project createProject(JSONObject obj) {
         try {
             Project realmProject = mRealm.createObject(Project.class);
             realmProject.setId(obj.getInt("id"));
             realmProject.setName(obj.getString("name"));
             realmProject.setAbout(obj.getString("about"));
+            return realmProject;
         } catch (JSONException e) {
             Log.e(TAG, "error " + e);
         }
         Log.d(TAG, "createProject " + obj);
+        return null;
     }
 
     private void testCreateEmployees(JSONArray feed) {
@@ -113,13 +123,16 @@ public class RealmImpl {
                 createEmployee(feed.getJSONObject(i));
             }
             long t = (System.currentTimeMillis() - start) / size;
+            Log.e("RESULT REALM", "[read] createEmployees avg = " + t);
+            start = System.currentTimeMillis();
             mRealm.commitTransaction();
+            t = (System.currentTimeMillis() - start) / size;
             Log.e("RESULT REALM", "createEmployees avg = " + t);
         } catch (Exception e) {
         }
     }
 
-    private void createEmployee(JSONObject obj) {
+    private Employee createEmployee(JSONObject obj) {
         try {
             Employee realmEmployee = mRealm.createObject(Employee.class);
             realmEmployee.setId(obj.getInt("id"));
@@ -143,10 +156,12 @@ public class RealmImpl {
 
             realmEmployee.setPersonal(realmPersonal);
             realmEmployee.setAddress(realmAddress);
+            return realmEmployee;
         } catch (JSONException e) {
             Log.e(TAG, "error " + e);
         }
         Log.d(TAG, "createEmployee " + obj);
+        return null;
     }
 
     private void testFindEmployeeById(int max) {

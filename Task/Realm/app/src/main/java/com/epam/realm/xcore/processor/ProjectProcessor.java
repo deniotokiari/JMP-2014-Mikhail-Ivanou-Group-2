@@ -5,24 +5,18 @@ import android.content.Context;
 import android.util.Log;
 
 import com.epam.realm.xcore.model.Project;
+import com.google.gson.Gson;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 
-import java.util.List;
-
-import by.istin.android.xcore.ContextHolder;
-import by.istin.android.xcore.db.impl.DBHelper;
 import by.istin.android.xcore.processor.impl.AbstractStringProcessor;
 import by.istin.android.xcore.provider.IDBContentProviderSupport;
 import by.istin.android.xcore.provider.ModelContract;
 import by.istin.android.xcore.source.DataSourceRequest;
-import by.istin.android.xcore.utils.ContentUtils;
 
 /**
  * Created by sergey on 07.12.2014.
  */
-public class ProjectProcessor extends AbstractStringProcessor<JSONArray> {
+public class ProjectProcessor extends AbstractStringProcessor<Project[]> {
 
     public static final String KEY = "processor:project";
     private final IDBContentProviderSupport mDbContentProvider;
@@ -32,20 +26,24 @@ public class ProjectProcessor extends AbstractStringProcessor<JSONArray> {
     }
 
     @Override
-    public void cache(Context context, DataSourceRequest dataSourceRequest, JSONArray jsonArray) throws Exception {
-        int length = jsonArray.length();
+    public void cache(Context context, DataSourceRequest dataSourceRequest, Project[] jsonArray) throws Exception {
+        int length = jsonArray.length;
         ContentValues[] values = new ContentValues[length];
+        long start = System.currentTimeMillis();
         for (int i = 0; i < length; i++) {
-            JSONObject obj = jsonArray.getJSONObject(i);
+            Project obj = jsonArray[i];
             ContentValues val = new ContentValues();
-            val.put(Project.ID, obj.getInt(Project.ID));
-            val.put(Project.NAME, obj.getString(Project.NAME));
-            val.put(Project.ABOUT, obj.getString(Project.ABOUT));
+            val.put(Project.ID, obj.getId());
+            val.put(Project.NAME, obj.getName());
+            val.put(Project.ABOUT, obj.getAbout());
             values[i] = val;
         }
-        long start = System.currentTimeMillis();
-        mDbContentProvider.bulkInsertOrUpdate(ModelContract.getUri(Project.class), values);
         long t = (System.currentTimeMillis() - start) / length;
+        Log.e("RESULT XCORE", "[read] createProjects avg = " + t);
+
+        start = System.currentTimeMillis();
+        mDbContentProvider.bulkInsertOrUpdate(ModelContract.getUri(Project.class), values);
+        t = (System.currentTimeMillis() - start) / length;
         Log.e("RESULT XCORE", "createProjects avg = " + t);
     }
 
@@ -55,7 +53,9 @@ public class ProjectProcessor extends AbstractStringProcessor<JSONArray> {
     }
 
     @Override
-    protected JSONArray convert(String string) throws Exception {
-        return new JSONArray(string);
+    protected Project[] convert(String string) throws Exception {
+        Gson gson = new Gson();
+        Project[] units = gson.fromJson(string, Project[].class);
+        return units;
     }
 }
