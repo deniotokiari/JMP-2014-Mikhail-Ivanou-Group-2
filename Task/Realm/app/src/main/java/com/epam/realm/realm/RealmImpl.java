@@ -4,15 +4,9 @@ import android.content.Context;
 import android.util.Log;
 
 import com.epam.realm.DataProvider;
-import com.epam.realm.realm.model.Address;
 import com.epam.realm.realm.model.Employee;
-import com.epam.realm.realm.model.Personal;
 import com.epam.realm.realm.model.Project;
 import com.epam.realm.realm.model.Unit;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 
@@ -46,18 +40,18 @@ public class RealmImpl {
         testCreateProjects(mProvider.getFeedProjects());
         testCreateEmployees(mProvider.getFeedEmployees());
 
-        testFindEmployeeById(mProvider.getFeedEmployees().length());
-        testFindProjectById(mProvider.getFeedProjects().length());
-        testFindUnitById(mProvider.getFeedUnits().length());
+        testFindEmployeeById(mProvider.getFeedEmployees().length);
+        testFindProjectById(mProvider.getFeedProjects().length);
+        testFindUnitById(mProvider.getFeedUnits().length);
     }
 
-    private void testCreateUnits(JSONArray feed) {
+    private void testCreateUnits(Unit[] feed) {
         try {
             mRealm.beginTransaction();
-            int size = feed.length();
+            int size = feed.length;
             long start = System.currentTimeMillis();
             for (int i = 0; i < size; i++) {
-                createUnit(feed.getJSONObject(i));
+                createUnit(feed[i]);
             }
             long t = (System.currentTimeMillis() - start) / size;
             Log.e("RESULT REALM", "[read] createUnits avg = " + t);
@@ -69,26 +63,20 @@ public class RealmImpl {
         }
     }
 
-    private Unit createUnit(JSONObject obj) {
-        try {
-            Unit realmUnit = mRealm.createObject(Unit.class);
-            realmUnit.setId(obj.getInt("id"));
-            realmUnit.setTitle(obj.getString("title"));
-            return realmUnit;
-        } catch (JSONException e) {
-            Log.e(TAG, "error " + e);
-        }
-        Log.d(TAG, "createUnit " + obj);
-        return null;
+    private Unit createUnit(Unit obj) {
+        Unit realmUnit = mRealm.createObject(Unit.class);
+        realmUnit.setId(obj.getId());
+        realmUnit.setTitle(obj.getTitle());
+        return realmUnit;
     }
 
-    private void testCreateProjects(JSONArray feed) {
+    private void testCreateProjects(Project[] feed) {
         try {
             mRealm.beginTransaction();
-            int size = feed.length();
+            int size = feed.length;
             long start = System.currentTimeMillis();
             for (int i = 0; i < size; i++) {
-                createProject(feed.getJSONObject(i));
+                createProject(feed[i]);
             }
             long t = (System.currentTimeMillis() - start) / size;
             Log.e("RESULT REALM", "[read] createProjects avg = " + t);
@@ -100,27 +88,21 @@ public class RealmImpl {
         }
     }
 
-    private Project createProject(JSONObject obj) {
-        try {
-            Project realmProject = mRealm.createObject(Project.class);
-            realmProject.setId(obj.getInt("id"));
-            realmProject.setName(obj.getString("name"));
-            realmProject.setAbout(obj.getString("about"));
-            return realmProject;
-        } catch (JSONException e) {
-            Log.e(TAG, "error " + e);
-        }
-        Log.d(TAG, "createProject " + obj);
-        return null;
+    private Project createProject(Project obj) {
+        Project realmProject = mRealm.createObject(Project.class);
+        realmProject.setId(obj.getId());
+        realmProject.setName(obj.getName());
+        realmProject.setAbout(obj.getAbout());
+        return realmProject;
     }
 
-    private void testCreateEmployees(JSONArray feed) {
+    private void testCreateEmployees(Employee[] feed) {
         try {
             mRealm.beginTransaction();
-            int size = feed.length();
+            int size = feed.length;
             long start = System.currentTimeMillis();
             for (int i = 0; i < size; i++) {
-                createEmployee(feed.getJSONObject(i));
+                createEmployee(feed[i]);
             }
             long t = (System.currentTimeMillis() - start) / size;
             Log.e("RESULT REALM", "[read] createEmployees avg = " + t);
@@ -132,36 +114,15 @@ public class RealmImpl {
         }
     }
 
-    private Employee createEmployee(JSONObject obj) {
-        try {
-            Employee realmEmployee = mRealm.createObject(Employee.class);
-            realmEmployee.setId(obj.getInt("id"));
-            realmEmployee.setName(obj.getString("name"));
-            realmEmployee.setEmail(obj.getString("email"));
-            realmEmployee.setAge(obj.getInt("age"));
-            realmEmployee.setStatus(obj.getString("status"));
+    private Employee createEmployee(Employee obj) {
+        Employee realmEmployee = mRealm.createObject(Employee.class);
+        realmEmployee.setId(obj.getId());
+        realmEmployee.setName(obj.getName());
+        realmEmployee.setEmail(obj.getEmail());
+        realmEmployee.setAge(obj.getAge());
+        realmEmployee.setStatus(obj.getStatus());
 
-            Personal realmPersonal = mRealm.createObject(Personal.class);
-            JSONObject jsonObjectPersonal = obj.getJSONObject("personal");
-            realmPersonal.setCurProjectId(jsonObjectPersonal.getInt("curProject"));
-            realmPersonal.setUnitId(jsonObjectPersonal.getInt("unit"));
-            realmPersonal.setEmployee(realmEmployee);
-
-            Address realmAddress = mRealm.createObject(Address.class);
-            JSONObject jsonObjectAddress = obj.getJSONObject("address");
-            realmAddress.setCountry(jsonObjectAddress.getString("country"));
-            realmAddress.setCity(jsonObjectAddress.getString("city"));
-            realmAddress.setStreet(jsonObjectAddress.getString("street"));
-            realmAddress.setPostalCode(jsonObjectAddress.getInt("postalCode"));
-
-            realmEmployee.setPersonal(realmPersonal);
-            realmEmployee.setAddress(realmAddress);
-            return realmEmployee;
-        } catch (JSONException e) {
-            Log.e(TAG, "error " + e);
-        }
-        Log.d(TAG, "createEmployee " + obj);
-        return null;
+        return realmEmployee;
     }
 
     private void testFindEmployeeById(int max) {

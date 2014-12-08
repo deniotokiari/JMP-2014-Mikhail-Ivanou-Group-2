@@ -2,10 +2,13 @@ package com.epam.realm;
 
 import android.content.Context;
 
-import org.json.JSONArray;
+import com.epam.realm.realm.model.Employee;
+import com.epam.realm.realm.model.Project;
+import com.epam.realm.realm.model.Unit;
+import com.google.gson.Gson;
+
 import org.json.JSONException;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -21,18 +24,18 @@ public class DataProvider {
 
     private final Context mContext;
 
-    private JSONArray mEmployees;
-    private JSONArray mProjects;
-    private JSONArray mUnits;
+    private Employee[] mEmployees;
+    private Project[] mProjects;
+    private Unit[] mUnits;
 
     public DataProvider(Context context) {
         mContext = context;
     }
 
-    public JSONArray getFeedEmployees() {
+    public Employee[] getFeedEmployees() {
         try {
             if (mEmployees == null) {
-                mEmployees = readAssets(FILE_EMPLOYEE);
+                mEmployees = readAssets(FILE_EMPLOYEE, Employee[].class);
             }
             return mEmployees;
         } catch (Exception e) {
@@ -40,10 +43,10 @@ public class DataProvider {
         }
     }
 
-    public JSONArray getFeedProjects() {
+    public Project[] getFeedProjects() {
         try {
             if (mProjects == null) {
-                mProjects = readAssets(FILE_PROJECT);
+                mProjects = readAssets(FILE_PROJECT, Project[].class);
             }
             return mProjects;
         } catch (Exception e) {
@@ -51,10 +54,10 @@ public class DataProvider {
         }
     }
 
-    public JSONArray getFeedUnits() {
+    public Unit[] getFeedUnits() {
         try {
             if (mUnits == null) {
-                mUnits = readAssets(FILE_UNIT);
+                mUnits = readAssets(FILE_UNIT, Unit[].class);
             }
             return mUnits;
         } catch (Exception e) {
@@ -62,15 +65,11 @@ public class DataProvider {
         }
     }
 
-    public JSONArray readAssets(String file) throws IOException, JSONException {
+    public <T> T readAssets(String file, Class<T> clazz) throws IOException, JSONException {
         InputStream inputStream = getAssetInputScream(file);
-        BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
-        StringBuilder total = new StringBuilder();
-        String line;
-        while ((line = r.readLine()) != null) {
-            total.append(line);
-        }
-        return new JSONArray(total.toString());
+        InputStreamReader reader = new InputStreamReader(inputStream);
+        Gson gson = new Gson();
+        return gson.fromJson(reader, clazz);
     }
 
     public InputStream getAssetInputScream(String file) throws IOException {

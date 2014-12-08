@@ -5,9 +5,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.epam.realm.xcore.model.Employee;
-import com.google.gson.Gson;
 
-import by.istin.android.xcore.processor.impl.AbstractStringProcessor;
+import by.istin.android.xcore.processor.impl.AbstractGsonProcessor;
 import by.istin.android.xcore.provider.IDBContentProviderSupport;
 import by.istin.android.xcore.provider.ModelContract;
 import by.istin.android.xcore.source.DataSourceRequest;
@@ -15,12 +14,13 @@ import by.istin.android.xcore.source.DataSourceRequest;
 /**
  * Created by sergey on 07.12.2014.
  */
-public class EmployeeProcessor extends AbstractStringProcessor<Employee[]> {
+public class EmployeeProcessor extends AbstractGsonProcessor<Employee[]> {
 
     public static final String KEY = "processor:employee";
     private final IDBContentProviderSupport mDbContentProvider;
 
     public EmployeeProcessor(IDBContentProviderSupport dbContentProvider) {
+        super(Employee[].class);
         mDbContentProvider = dbContentProvider;
     }
 
@@ -53,10 +53,4 @@ public class EmployeeProcessor extends AbstractStringProcessor<Employee[]> {
         return KEY;
     }
 
-    @Override
-    protected Employee[] convert(String string) throws Exception {
-        Gson gson = new Gson();
-        Employee[] units = gson.fromJson(string, Employee[].class);
-        return units;
-    }
 }

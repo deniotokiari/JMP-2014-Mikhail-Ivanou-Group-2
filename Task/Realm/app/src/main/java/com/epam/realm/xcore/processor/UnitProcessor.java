@@ -5,9 +5,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.epam.realm.xcore.model.Unit;
-import com.google.gson.Gson;
 
-import by.istin.android.xcore.processor.impl.AbstractStringProcessor;
+import by.istin.android.xcore.processor.impl.AbstractGsonProcessor;
 import by.istin.android.xcore.provider.IDBContentProviderSupport;
 import by.istin.android.xcore.provider.ModelContract;
 import by.istin.android.xcore.source.DataSourceRequest;
@@ -15,12 +14,13 @@ import by.istin.android.xcore.source.DataSourceRequest;
 /**
  * Created by sergey on 07.12.2014.
  */
-public class UnitProcessor extends AbstractStringProcessor<Unit[]> {
+public class UnitProcessor extends AbstractGsonProcessor<Unit[]> {
 
     public static final String KEY = "processor:unit";
     private final IDBContentProviderSupport mDbContentProvider;
 
     public UnitProcessor(IDBContentProviderSupport dbContentProvider) {
+        super(Unit[].class);
         mDbContentProvider = dbContentProvider;
     }
 
@@ -48,12 +48,5 @@ public class UnitProcessor extends AbstractStringProcessor<Unit[]> {
     @Override
     public String getAppServiceKey() {
         return KEY;
-    }
-
-    @Override
-    protected Unit[] convert(String string) throws Exception {
-        Gson gson = new Gson();
-        Unit[] units = gson.fromJson(string, Unit[].class);
-        return units;
     }
 }

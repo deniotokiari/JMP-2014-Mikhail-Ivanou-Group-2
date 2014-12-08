@@ -5,10 +5,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.epam.realm.xcore.model.Project;
-import com.google.gson.Gson;
 
-
-import by.istin.android.xcore.processor.impl.AbstractStringProcessor;
+import by.istin.android.xcore.processor.impl.AbstractGsonProcessor;
 import by.istin.android.xcore.provider.IDBContentProviderSupport;
 import by.istin.android.xcore.provider.ModelContract;
 import by.istin.android.xcore.source.DataSourceRequest;
@@ -16,12 +14,13 @@ import by.istin.android.xcore.source.DataSourceRequest;
 /**
  * Created by sergey on 07.12.2014.
  */
-public class ProjectProcessor extends AbstractStringProcessor<Project[]> {
+public class ProjectProcessor extends AbstractGsonProcessor<Project[]> {
 
     public static final String KEY = "processor:project";
     private final IDBContentProviderSupport mDbContentProvider;
 
     public ProjectProcessor(IDBContentProviderSupport dbContentProvider) {
+        super(Project[].class);
         mDbContentProvider = dbContentProvider;
     }
 
@@ -52,10 +51,4 @@ public class ProjectProcessor extends AbstractStringProcessor<Project[]> {
         return KEY;
     }
 
-    @Override
-    protected Project[] convert(String string) throws Exception {
-        Gson gson = new Gson();
-        Project[] units = gson.fromJson(string, Project[].class);
-        return units;
-    }
 }
