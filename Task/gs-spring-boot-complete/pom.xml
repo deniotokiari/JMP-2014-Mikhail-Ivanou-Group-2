@@ -25,7 +25,7 @@
     </dependencies>
 
     <properties>
-        <start-class>org.shop.ShopLauncher</start-class>
+        <start-class>com.epam.jmp.Application</start-class>
     </properties>
 
     <build>
