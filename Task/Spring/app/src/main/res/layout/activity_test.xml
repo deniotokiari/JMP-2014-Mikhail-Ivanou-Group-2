@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="30dp">
+
+    <EditText
+        android:id="@+id/edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="id"
+        android:textSize="20pt" />
+
+    <Button
+        android:id="@+id/find"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="FIND"
+        android:textSize="20pt" />
+
+    <TextView
+        android:id="@+id/response"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:text="New Text"
+        android:textSize="10pt" />
+
+
+</LinearLayout>
