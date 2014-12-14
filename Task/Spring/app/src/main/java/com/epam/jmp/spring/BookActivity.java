@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.epam.jmp.spring.model.Book;
 
-
 public class BookActivity extends ActionBarActivity {
 
     @Override
@@ -22,13 +21,24 @@ public class BookActivity extends ActionBarActivity {
                 if (id == null || id.isEmpty()) {
                     return;
                 }
-                new HttpRequestTask().execute("http://10.0.2.2:8080/books/" + id, Book.class, new HttpRequestTask.Callback() {
+                final TextView tv = ((TextView) findViewById(R.id.response));
+                tv.setVisibility(View.GONE);
+                new HttpRequestTask().execute("http://10.0.2.2:8080/books/" + id, Book.class, new HttpRequestTask.Callback<Book>() {
 
                     @Override
-                    public void sucess(String resp) {
+                    public void sucess(Book resp) {
+                        tv.setVisibility(View.VISIBLE);
                         if (resp != null) {
-                            StringBuilder out = new StringBuilder(resp);
-                            ((TextView) findViewById(R.id.response)).setText(out.toString());
+                            StringBuilder out = new StringBuilder();
+                            out.append("id: ");
+                            out.append(resp.getId());
+                            out.append("\ntitle: ");
+                            out.append(resp.getTitle());
+                            out.append("\nurl: ");
+                            out.append(resp.getUrl());
+                            tv.setText(out.toString());
+                        }else{
+                            tv.setText("плохо...");
                         }
                     }
                 });

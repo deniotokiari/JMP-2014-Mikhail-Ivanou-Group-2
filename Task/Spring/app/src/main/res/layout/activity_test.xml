@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="id"
+        android:inputType="number"
         android:textSize="20pt" />
 
     <Button
@@ -26,6 +27,5 @@
         android:gravity="center"
         android:text="New Text"
         android:textSize="10pt" />
-
 
 </LinearLayout>
