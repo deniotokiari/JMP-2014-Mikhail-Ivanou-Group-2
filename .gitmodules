@@ -1,0 +1,3 @@
+[submodule "Task/TODD/xcore"]
+	path = Task/TODD/xcore
+	url = https://github.com/bandysik/android_xcore.git

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TODD</string>
+
+    <string name="account_type">by.todd</string>
+
+    <string name="filter_yesterday">Вчера</string>
+    <string name="filter_today">Сегодня</string>
+    <string name="filter_tommorow">Завтра</string>
+    <string name="filter_week">Неделя</string>
+    <string name="filter_month">Месяц</string>
+
+    <string name="priority_hightes">Очень важно</string>
+    <string name="priority_hight">Важно</string>
+    <string name="priority_normal">Нормально</string>
+    <string name="priority_low">Не важно</string>
+    <string name="priority_lowest">На всякий случай</string>
+
+</resources>
